@@ -9,6 +9,7 @@ def client_init():
 
     Dest = "127.0.0.1"
     ConnectionPort = (Dest, ConnectionPort)
+    bufferSize  = 256
 
     print("Client: ", ConnectionPort)
 
@@ -18,3 +19,9 @@ def client_init():
         Msg = str(input())
         SendMsg = str.encode(Msg)
         UDPClientSocket.sendto(SendMsg, ConnectionPort)
+        if(Msg == "givelist?"):
+            RecvMsg = UDPClientSocket.recvfrom(bufferSize)
+            message = RecvMsg[0].decode()
+            address = RecvMsg[1]
+            port = address[1]
+            print(f"{port}: {message}")

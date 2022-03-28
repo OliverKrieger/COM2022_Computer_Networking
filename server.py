@@ -31,7 +31,6 @@ def server_init():
         if(message == "givelist?"):
             list = listdir(resourcesPath)
             list = str.encode("\n" + '\n'.join(list))
-            print(address)
-            UDPServerSocket.sendto(list, ConnectionPort)
+            UDPServerSocket.sendto(list, address)
         else:
-            print("{}".format(port), ": {}".format(message))
+            print(f"{port}: {message}")
