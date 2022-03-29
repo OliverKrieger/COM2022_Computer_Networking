@@ -25,3 +25,13 @@ def client_init():
             address = RecvMsg[1]
             port = address[1]
             print(f"{port}: {message}")
+
+            # rewrite this into a header msg about what you want
+            # and function maybe
+            print("which item would you like (enter filename exactly)")
+            Msg = str(input())
+            SendMsg = str.encode(Msg)
+            UDPClientSocket.sendto(SendMsg, ConnectionPort)
+            RecvMsg = UDPClientSocket.recvfrom(bufferSize)
+            message = RecvMsg[0].decode()
+            print(f"{port}: {message}")

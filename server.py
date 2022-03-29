@@ -23,14 +23,23 @@ def server_init():
     UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
     UDPServerSocket.bind((localIP, BindPort))
 
+    list = listdir(resourcesPath)
+    sendList = str.encode("\n" + '\n'.join(list))
+
     while(True):
         RecvMsg = UDPServerSocket.recvfrom(bufferSize)
         message = RecvMsg[0].decode()
         address = RecvMsg[1]
         port = address[1]
         if(message == "givelist?"):
-            list = listdir(resourcesPath)
-            list = str.encode("\n" + '\n'.join(list))
-            UDPServerSocket.sendto(list, address)
+            UDPServerSocket.sendto(sendList, address)
+
+            # rewrite this into some other function to read file
+            # also will have to be split into packages
+            RecvMsg = UDPServerSocket.recvfrom(bufferSize)
+            message = RecvMsg[0].decode()
+            f = open(resourcesPath + "/" + message, "r")
+            f = str.encode(f.read())
+            UDPServerSocket.sendto(f, address)
         else:
             print(f"{port}: {message}")
