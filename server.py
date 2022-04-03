@@ -1,7 +1,7 @@
 import socket
 import sys
 from os import listdir
-from utils import RecvMsg, app_recvMsg
+from utils import RecvMsg, app_recvMsg, app_sendMsg, app_input
 
 #******************************************************************#
                                 #Global
@@ -29,7 +29,7 @@ bufferSize  = 256
 resourcesPath = "./resources"
 
 list = listdir(resourcesPath)
-sendList = str.encode("\n" + '\n'.join(list))
+sendList = "\n" + '\n'.join(list)
 
 print("Server: ",ConnectionPort, " ", BindPort)
 
@@ -58,14 +58,14 @@ def server_msgManager(msg: RecvMsg):
         print(f"{msg.port}: {msg.message}")
 
 def givelist(msg: RecvMsg):
-    UDPServerSocket.sendto(sendList, msg.address)
+    app_sendMsg(UDPServerSocket, sendList, msg.address)
 
     # rewrite this into some other function to read file
     # also will have to be split into packages
     receivedMsg = RecvMsg(app_recvMsg(UDPServerSocket, bufferSize)).getRecvMsg()
     f = open(resourcesPath + "/" + receivedMsg.message, "r")
-    f = str.encode(f.read())
-    UDPServerSocket.sendto(f, receivedMsg.address)
+    f = f.read()
+    app_sendMsg(UDPServerSocket, f, receivedMsg.address)
 
 #******************************************************************#
 #******************************************************************#

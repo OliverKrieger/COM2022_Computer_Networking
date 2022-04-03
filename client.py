@@ -1,6 +1,6 @@
 import socket
 import sys
-from utils import RecvMsg, app_recvMsg
+from utils import RecvMsg, app_recvMsg, app_sendMsg, app_input
 
 #******************************************************************#
                                 #Global
@@ -31,22 +31,9 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 #####################################
 def client_init():
     while(True):
-        input = client_input()
-        client_sendMsg(input)
+        input = app_input()
+        app_sendMsg(UDPClientSocket, input, ConnectionPort)
         client_msgManager(input)
-
-#####################################
-#        Basic Functionality        #
-#####################################
-def client_input():
-    Msg = str(input())
-    return Msg
-    
-def client_sendMsg(Msg: str):
-    SendMsg = str.encode(Msg)
-    UDPClientSocket.sendto(SendMsg, ConnectionPort)
-
-
 
 #####################################
 #          Message Manager          #
@@ -61,8 +48,8 @@ def givelist():
     # rewrite this into a header msg about what you want
     # and function maybe
     print("which item would you like (enter filename exactly)")
-    input = client_input()
-    client_sendMsg(input)
+    input = app_input()
+    app_sendMsg(UDPClientSocket, input, ConnectionPort)
     receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
     print(f"{receivedMsg.port}: {receivedMsg.message}")
 
