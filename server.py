@@ -45,17 +45,27 @@ UDPServerSocket.bind((localIP, BindPort))
 #          Start Listening          #
 #####################################
 def server_init():
-    
     while(True):
         receivedMsg = RecvMsg(app_recvMsg(UDPServerSocket, bufferSize)).getRecvMsg()
-        if(receivedMsg.message == "givelist?"):
-            UDPServerSocket.sendto(sendList, receivedMsg.address)
+        server_msgManager(receivedMsg)
 
-            # rewrite this into some other function to read file
-            # also will have to be split into packages
-            receivedMsg = RecvMsg(app_recvMsg(UDPServerSocket, bufferSize)).getRecvMsg()
-            f = open(resourcesPath + "/" + receivedMsg.message, "r")
-            f = str.encode(f.read())
-            UDPServerSocket.sendto(f, receivedMsg.address)
-        else:
-            print(f"{receivedMsg.port}: {receivedMsg.message}")
+#####################################
+#          Message Manager          #
+#####################################
+def server_msgManager(msg: RecvMsg):
+    if(msg.message == "givelist?"): givelist(msg)
+    else:
+        print(f"{msg.port}: {msg.message}")
+
+def givelist(msg: RecvMsg):
+    UDPServerSocket.sendto(sendList, msg.address)
+
+    # rewrite this into some other function to read file
+    # also will have to be split into packages
+    receivedMsg = RecvMsg(app_recvMsg(UDPServerSocket, bufferSize)).getRecvMsg()
+    f = open(resourcesPath + "/" + receivedMsg.message, "r")
+    f = str.encode(f.read())
+    UDPServerSocket.sendto(f, receivedMsg.address)
+
+#******************************************************************#
+#******************************************************************#
