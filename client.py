@@ -1,6 +1,6 @@
 import socket
 import sys
-from utils import RecvMsg, app_recvMsg, app_sendMsg, app_input
+from utils import RecvMsg, app_recvMsg, app_sendMsg, app_input, printCommands
 
 #******************************************************************#
                                 #Global
@@ -15,7 +15,7 @@ else:
 # Setup Global Variables
 Dest = "127.0.0.1"
 ConnectionPort = (Dest, ConnectionPort)
-bufferSize  = 256
+bufferSize  = 32
 
 print("Client: ", ConnectionPort)
 
@@ -32,16 +32,18 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 def client_init():
     while(True):
         input = app_input()
-        app_sendMsg(UDPClientSocket, input, ConnectionPort)
         client_msgManager(input)
 
 #####################################
 #          Message Manager          #
 #####################################
 def client_msgManager(input):
-    if(input == "givelist?"): givelist()
+    if(input == "givelist?"): givelist(input)
+    elif(input == "help"): printCommands()
+    else: print("Input unrecognized. Please try again or type 'help' for commands.")
 
-def givelist():
+def givelist(input):
+    app_sendMsg(UDPClientSocket, input, ConnectionPort)
     receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
     print(f"{receivedMsg.port}: {receivedMsg.message}")
 
@@ -51,7 +53,7 @@ def givelist():
     input = app_input()
     app_sendMsg(UDPClientSocket, input, ConnectionPort)
     receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
-    print(f"{receivedMsg.port}: {receivedMsg.message}")
+    print(f"{receivedMsg.port}: {receivedMsg.message}")  
 
 #******************************************************************#
 #******************************************************************#

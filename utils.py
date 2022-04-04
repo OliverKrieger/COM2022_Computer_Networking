@@ -1,4 +1,5 @@
 import socket
+import sys
 #####################################
 #              Classes              #
 #####################################
@@ -34,3 +35,10 @@ def app_sendMsg(socket: socket.socket, Msg: str, address: int):
 def readFile(path):
     f = open(path, "r")
     return f.read()
+
+#####################################
+#              Utility              #
+#####################################
+
+def printCommands():
+    print("givelist? - receive a list of files from the connected user")
