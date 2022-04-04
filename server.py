@@ -1,7 +1,7 @@
 import socket
 import sys
 from os import listdir
-from utils import RecvMsg, app_recvMsg, app_sendMsg, app_input
+from utils import RecvMsg, app_recvMsg, app_sendMsg, readFile
 
 #******************************************************************#
                                 #Global
@@ -63,8 +63,7 @@ def givelist(msg: RecvMsg):
     # rewrite this into some other function to read file
     # also will have to be split into packages
     receivedMsg = RecvMsg(app_recvMsg(UDPServerSocket, bufferSize)).getRecvMsg()
-    f = open(resourcesPath + "/" + receivedMsg.message, "r")
-    f = f.read()
+    f = readFile(resourcesPath + "/" + receivedMsg.message)
     app_sendMsg(UDPServerSocket, f, receivedMsg.address)
 
 #******************************************************************#

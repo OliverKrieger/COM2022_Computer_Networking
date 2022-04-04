@@ -26,3 +26,11 @@ def app_recvMsg(socket: socket.socket, bufferSize):
 def app_sendMsg(socket: socket.socket, Msg: str, address: int):
     SendMsg = str.encode(Msg)
     socket.sendto(SendMsg, address)
+
+#####################################
+#          File Management          #
+#####################################
+
+def readFile(path):
+    f = open(path, "r")
+    return f.read()
