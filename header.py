@@ -15,11 +15,11 @@ headerSize = 8
     # 31 = givelist - gives a list of files user has
 
 class Requests(Enum):
-    handshake: 1
-    res: 2
-    responsereceived: 21
-    req: 3
-    givelist: 31
+    handshake= 1
+    res= 2
+    responsereceived= 21
+    req= 3
+    givelist= 31
 
 
 #########################################

@@ -42,7 +42,7 @@ def client_init():
 #          Message Manager          #
 #####################################
 def client_msgManager(input):
-    if(input == "givelist"): givelist(input)
+    if(input == Requests.givelist.name): givelist(Requests['givelist'].value)
     elif(input == "help"): printCommands()
     else: print("Input unrecognized. Please try again or type 'help' for commands.")
 
@@ -50,7 +50,7 @@ def client_msgManager(input):
 #           Functionality           #
 #####################################
 def handshake():
-    req = makeRequest(1, bufferSize)
+    req = makeRequest(Requests.handshake.value, bufferSize)
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
     
     UDPClientSocket.settimeout(1)
@@ -63,7 +63,8 @@ def handshake():
 
 # Give list functionality
 def givelist(input):
-    app_sendMsg(UDPClientSocket, input, ConnectionPort)
+    req = makeRequest(input, "")
+    app_sendMsg(UDPClientSocket, req, ConnectionPort)
     receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
     print(f"{receivedMsg.port}: {receivedMsg.message}")
 
@@ -71,7 +72,8 @@ def givelist(input):
     # and function maybe
     print("which item would you like (enter filename exactly)")
     input = app_input()
-    app_sendMsg(UDPClientSocket, input, ConnectionPort)
+    req = makeRequest(Requests.req.value, input)
+    app_sendMsg(UDPClientSocket, req, ConnectionPort)
     receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
     print(f"{receivedMsg.port}: {receivedMsg.message}")  
 

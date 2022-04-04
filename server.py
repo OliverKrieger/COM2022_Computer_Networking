@@ -2,7 +2,7 @@ import socket
 import sys
 from os import listdir
 from utils import RecvMsg, app_recvMsg, app_sendMsg, readFile
-from header import makeRequest
+from header import makeRequest, Requests
 
 #******************************************************************#
                                 #Global
@@ -54,8 +54,8 @@ def server_init():
 #          Message Manager          #
 #####################################
 def server_msgManager(msg: RecvMsg):
-    if(msg.type == 1): handshake(msg)
-    elif(msg.type == 31): givelist(msg)
+    if(msg.type == Requests.handshake.value): handshake(msg)
+    elif(msg.type == Requests.givelist.value): givelist(msg)
     else:
         print(f"{msg.port}: {msg.message}")
 
