@@ -1,11 +1,13 @@
 import socket
-import sys
+from header import headerSize
+
 #####################################
 #              Classes              #
 #####################################
 class RecvMsg:
     def __init__(self, msg):
-        self.message = msg[0].decode()
+        self.type = msg[0][0]
+        self.message = msg[0][headerSize:].decode()
         self.address = msg[1]
         self.port = self.address[1]
     
@@ -25,7 +27,7 @@ def app_recvMsg(socket: socket.socket, bufferSize):
     return socket.recvfrom(bufferSize)
 
 def app_sendMsg(socket: socket.socket, Msg: str, address: int):
-    SendMsg = str.encode(Msg)
+    SendMsg = str.encode(str(Msg))
     socket.sendto(SendMsg, address)
 
 #####################################
@@ -41,4 +43,4 @@ def readFile(path):
 #####################################
 
 def printCommands():
-    print("givelist? - receive a list of files from the connected user")
+    print("31 - receive a list of files from the connected user")

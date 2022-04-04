@@ -2,6 +2,7 @@ import socket
 import sys
 from os import listdir
 from utils import RecvMsg, app_recvMsg, app_sendMsg, readFile
+from header import makeRequest
 
 #******************************************************************#
                                 #Global
@@ -25,7 +26,7 @@ else:
 # Setup global Variables
 localIP = "127.0.0.1"
 ConnectionPort = (localIP, ConnectionPort)
-bufferSize  = 256
+bufferSize  = 32
 resourcesPath = "./resources"
 
 list = listdir(resourcesPath)
@@ -53,9 +54,18 @@ def server_init():
 #          Message Manager          #
 #####################################
 def server_msgManager(msg: RecvMsg):
-    if(msg.message == "givelist?"): givelist(msg)
+    if(msg.type == 1): handshake(msg)
+    elif(msg.type == 31): givelist(msg)
     else:
         print(f"{msg.port}: {msg.message}")
+
+#####################################
+#           Functionality           #
+#####################################
+def handshake(msg: RecvMsg):
+    print("Client Has said buffer size is:", msg.message)
+    req = makeRequest(1, bufferSize)
+    app_sendMsg(UDPServerSocket, req, msg.address)
 
 def givelist(msg: RecvMsg):
     app_sendMsg(UDPServerSocket, sendList, msg.address)

@@ -1,6 +1,9 @@
 import socket
 import sys
+
+from sympy import EX
 from utils import RecvMsg, app_recvMsg, app_sendMsg, app_input, printCommands
+from header import makeRequest, Requests
 
 #******************************************************************#
                                 #Global
@@ -30,6 +33,7 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 #          Start Listening          #
 #####################################
 def client_init():
+    handshake()
     while(True):
         input = app_input()
         client_msgManager(input)
@@ -38,10 +42,26 @@ def client_init():
 #          Message Manager          #
 #####################################
 def client_msgManager(input):
-    if(input == "givelist?"): givelist(input)
+    if(input == "givelist"): givelist(input)
     elif(input == "help"): printCommands()
     else: print("Input unrecognized. Please try again or type 'help' for commands.")
 
+#####################################
+#           Functionality           #
+#####################################
+def handshake():
+    req = makeRequest(1, bufferSize)
+    app_sendMsg(UDPClientSocket, req, ConnectionPort)
+    
+    UDPClientSocket.settimeout(1)
+    try:
+        receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
+        print("Server Has said buffer size is:", receivedMsg.message)
+    except Exception as e:
+        print(e)
+        handshake()
+
+# Give list functionality
 def givelist(input):
     app_sendMsg(UDPClientSocket, input, ConnectionPort)
     receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()

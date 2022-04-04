@@ -1,12 +1,9 @@
-from urllib import request
+from enum import Enum
 
-# bytes allowed
-request_size = 8
-current_packet_size = 4
-total_packet_size = 4
+bufferSize = 32
 
 # total size
-header_size = request_size + current_packet_size + total_packet_size
+headerSize = 8
 
 #########################################
 # Requests
@@ -17,7 +14,21 @@ header_size = request_size + current_packet_size + total_packet_size
 # 3 = request - message contains request value
     # 31 = givelist - gives a list of files user has
 
+class Requests(Enum):
+    handshake: 1
+    res: 2
+    responsereceived: 21
+    req: 3
+    givelist: 31
+
 
 #########################################
 # Funcions
 #########################################
+def makeRequest(r: int, m: str) -> str: # r = request, m = message
+    if(int(r) > 255):
+        raise ValueError('Request message is', r, ' but maximum allowed size is: ', 255)
+    
+    zeros = 0
+    req = r.to_bytes(1, 'little') + zeros.to_bytes(headerSize-1, 'little')# bufferSize
+    return req.decode('UTF-8') + str(m)
