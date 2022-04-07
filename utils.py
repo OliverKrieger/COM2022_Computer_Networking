@@ -25,7 +25,7 @@ class RecvMsg:
 
 class Package: # package
     def __init__(self, msg):
-        self.pt = getPackageNumber(msg)
+        self.pt = getPackageNumber(bytes(msg, "utf-8"))
         self.list = splitPackage(bytes(msg, "utf-8"))
 
     def getPck(self):
