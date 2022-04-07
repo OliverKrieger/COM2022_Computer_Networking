@@ -1,4 +1,5 @@
 from enum import Enum
+from constants import c_buffer, s_buffer
 
 bufferSize = 32
 
@@ -18,6 +19,7 @@ class Requests(Enum):
     handshake= 1
     res= 2
     responsereceived= 21
+    fullyreceived= 22
     req= 3
     givelist= 31
 
@@ -25,10 +27,29 @@ class Requests(Enum):
 #########################################
 # Funcions
 #########################################
-def makeRequest(r: int, m: str) -> str: # r = request, m = message
+#def makeRequest(r: int, pck: int, m: str) -> str:
+def makeRequest(l: list, m: bytes) -> bytes: # r = request, m = message
+    cnt = 1
+    r = 0 # request
+    pn = 0 # package number
+    pt = 0 # package total number
+    chks = 0 # checksum
+    for i in l:
+        if(cnt == 1) : r = i
+        if(cnt == 2) : pn = i
+        if(cnt == 3) : pt = i
+        if(cnt == 4) : chks = i
+        cnt += 1
+
     if(int(r) > 255):
         raise ValueError('Request message is', r, ' but maximum allowed size is: ', 255)
     
     zeros = 0
-    req = r.to_bytes(1, 'little') + zeros.to_bytes(headerSize-1, 'little')# bufferSize
-    return req.decode('UTF-8') + str(m)
+    # bufferSize
+    req = (r.to_bytes(1, 'little') 
+    + pn.to_bytes(1, 'little') 
+    + pt.to_bytes(1, 'little') 
+    + chks.to_bytes(1, 'little') 
+    + zeros.to_bytes(headerSize-4, 'little'))
+    return req + m
+

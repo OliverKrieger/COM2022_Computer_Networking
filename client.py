@@ -1,9 +1,11 @@
 import socket
 import sys
+from numpy import byte
 
 from sympy import EX
 from utils import RecvMsg, app_recvMsg, app_sendMsg, app_input, printCommands
 from header import makeRequest, Requests
+from constants import c_buffer, s_buffer
 
 #******************************************************************#
                                 #Global
@@ -50,12 +52,12 @@ def client_msgManager(input):
 #           Functionality           #
 #####################################
 def handshake():
-    req = makeRequest(Requests.handshake.value, bufferSize)
+    req = makeRequest([Requests.handshake.value], s_buffer.to_bytes(2, "little"))
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
     
     UDPClientSocket.settimeout(1)
     try:
-        receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
+        receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
         print("Server Has said buffer size is:", receivedMsg.message)
     except Exception as e:
         print(e)
@@ -63,19 +65,50 @@ def handshake():
 
 # Give list functionality
 def givelist(input):
-    req = makeRequest(input, "")
+    req = makeRequest([input], bytes())
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
-    receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
+    receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
     print(f"{receivedMsg.port}: {receivedMsg.message}")
 
     # rewrite this into a header msg about what you want
     # and function maybe
     print("which item would you like (enter filename exactly)")
     input = app_input()
-    req = makeRequest(Requests.req.value, input)
+    req = makeRequest([Requests.req.value], str.encode(input))
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
-    receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, bufferSize)).getRecvMsg()
-    print(f"{receivedMsg.port}: {receivedMsg.message}")  
+
+    totalMsg = parseMessage(receivePckHandshake())
+    print(totalMsg)
+    # print(f"{receivedMsg.port}: {totalMsg}")  
+    #print(f"{receivedMsg.port}: {receivedMsg.message}")  
+
+def receivePckHandshake():
+    return RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
+
+#parse message
+def parseMessage(initPck: RecvMsg):
+    UDPClientSocket.settimeout(10)
+    totalMsg = bytes()
+    pn = 0
+    while(pn <= initPck.pt):
+        print("client wait for next pck")
+        rMsg = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
+        print("client received pck nr ", rMsg.pn)
+        totalMsg += rMsg.bytes
+        if(pn != initPck.pt):
+            res = makeRequest([Requests.res.value, rMsg.pn+1], bytes())
+            print("client requesting pck nr ", rMsg.pn + 1)
+            app_sendMsg(UDPClientSocket, res, ConnectionPort)
+
+        pn = rMsg.pn + 1
+
+    res = makeRequest([Requests.fullyreceived.value], bytes())
+    app_sendMsg(UDPClientSocket, res, ConnectionPort)
+    print("last received: ", rMsg.message)
+    print("client msg complete")
+    return totalMsg.decode("utf-8")
+
+
 
 #******************************************************************#
 #******************************************************************#
