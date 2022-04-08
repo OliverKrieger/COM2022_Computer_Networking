@@ -65,28 +65,25 @@ def handshake():
 
 # Give list functionality
 def givelist(input):
-    req = makeRequest([input], bytes())
+    req = makeRequest([input], bytes()) # get list
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
-    receivedMsg = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
-    print(f"{receivedMsg.port}: {receivedMsg.message}")
+    ServerItemsList = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
+    print(f"{ServerItemsList.port}: {ServerItemsList.message}")
 
-    # rewrite this into a header msg about what you want
-    # and function maybe
     print("which item would you like (enter filename exactly)")
     input = app_input()
+    # ToDo - check that input is in the list of items returned! Otherwise ask again
+
+    recv_pck = receivePck(receivePckHandshake(input))
+    print(f"{ServerItemsList.port}: {recv_pck}")
+
+def receivePckHandshake(input):
     req = makeRequest([Requests.req.value], str.encode(input))
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
-
-    totalMsg = parseMessage(receivePckHandshake())
-    print(totalMsg)
-    # print(f"{receivedMsg.port}: {totalMsg}")  
-    #print(f"{receivedMsg.port}: {receivedMsg.message}")  
-
-def receivePckHandshake():
     return RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
 
 #parse message
-def parseMessage(initPck: RecvMsg):
+def receivePck(initPck: RecvMsg):
     UDPClientSocket.settimeout(10)
     totalMsg = bytes()
     pn = 0

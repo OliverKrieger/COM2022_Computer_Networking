@@ -27,11 +27,7 @@ else:
 # Setup global Variables
 localIP = "127.0.0.1"
 ConnectionPort = (localIP, ConnectionPort)
-bufferSize  = 32
 resourcesPath = "./resources"
-
-list = listdir(resourcesPath)
-sendList = "\n" + '\n'.join(list)
 
 print("Server: ",ConnectionPort, " ", BindPort)
 
@@ -70,14 +66,11 @@ def handshake(msg: RecvMsg):
     app_sendMsg(UDP_ss, req, msg.address)
 
 def givelist(msg: RecvMsg):
-    app_sendMsg(UDP_ss, str.encode(sendList), msg.address)
+    sendListTo(msg.address)
 
-    # rewrite this into some other function to read file
-    # also will have to be split into packages
     receivedMsg = RecvMsg(app_recvMsg(UDP_ss, s_buffer)).getRecvMsg()
     f = readFile(resourcesPath + "/" + receivedMsg.message)
     sendMessage(f, receivedMsg.address)
-    #app_sendMsg(UDP_ss, f, receivedMsg.address)
 
 def sendMessage(msg, addr):
     pck = Package(msg)
@@ -96,9 +89,13 @@ def sendMessage(msg, addr):
         pn = rMsg.pn
     print("server finished sending msg")
 
+def sendListTo(addr):
+    list = listdir(resourcesPath)
+    sendList = "\n" + '\n'.join(list)
+    app_sendMsg(UDP_ss, str.encode(sendList), addr)
+
 def initPckHandshake(pck:Package, addr):
     print("server: Total packages to send is: ", pck.pt)
-    #print("".join(pck.list))
     req = makeRequest([Requests.req.value, 0, pck.pt], bytes())
     app_sendMsg(UDP_ss, req, addr)
 
