@@ -69,7 +69,7 @@ def handshake():
 # givelist functionality
 def givelist(input):
     # get list
-    req = makeRequest([input], bytes()) 
+    req = makeRequest([input]) 
     ServerItemsList = receivePckFromServer(newReq(req, Requests.res.value))
     print(f"{ServerItemsList[1]}: {ServerItemsList[0]}")
 

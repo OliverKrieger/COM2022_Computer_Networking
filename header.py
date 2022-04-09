@@ -21,7 +21,7 @@ class Requests(Enum):
 # Funcions
 #########################################
 #def makeRequest(r: int, pck: int, m: str) -> str:
-def makeRequest(l: list, m: bytes) -> bytes: # r = request, m = message
+def makeRequest(l: list, m: bytes = bytes()) -> bytes: # r = request, m = message
     cnt = 1
     r = 0 # request
     pn = 0 # package number
