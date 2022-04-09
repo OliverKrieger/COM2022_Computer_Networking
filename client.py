@@ -78,7 +78,7 @@ def givelist(input):
     input = app_input()
     # ToDo - check that input is in the list of items returned! Otherwise ask again
 
-    req = makeRequest([Requests.req.value], str.encode(input))
+    req = makeRequest([Requests.filereq.value], str.encode(input))
     recv_pck = receivePckFromServer(receivePckHandshake(req))
     print(f"{recv_pck[1]}: {recv_pck[0]}")
 
@@ -91,7 +91,6 @@ def receivePckFromServer(initPck: RecvMsg):
     totalMsg = bytes()
     pn = 1
     while(pn <= initPck.pt):
-        print("Client request next pck")
         req = makeRequest([Requests.req.value, pn], bytes())
         totalMsg += newReq(req, Requests.res.value).bytes
         pn += 1

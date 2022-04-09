@@ -54,7 +54,6 @@ def server_init():
 #          Message Manager          #
 #####################################
 def server_msgManager(msg: RecvMsg):
-    print("Server request received", msg.type)
     if(msg.type == Requests.handshake.value): handshake(msg)
     elif(msg.type == Requests.givelist.value): givelist(msg)
     elif(msg.type == Requests.filereq.value): filereq(msg)
@@ -101,15 +100,13 @@ def sendMessage(msg, addr):
     print("server finished sending msg")
 
 def pckRequest(msg:RecvMsg):
-    print("Server pck request received: pn", msg.pn)
-    pck:Package = findInPckList(msg.address)[0]
+    pck:Package = findInPckList(msg.address)[0] # first in tuple is msg
     res = makeRequest([Requests.res.value, msg.pn, pck.pt], pck.getListItem(msg.pn-1))
     app_sendMsg(UDP_ss, res, msg.address)
 
 def findInPckList(addr):
     item:PckListItem
     for item in ToSendPackageList:
-        print("pck list item: ", item[1], " addr to find is ", addr)
         if(item[1] == addr):
             return item
     return None
