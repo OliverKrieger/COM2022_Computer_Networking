@@ -65,45 +65,55 @@ def server_msgManager(msg: RecvMsg):
 #####################################
 #           Functionality           #
 #####################################
+# Initial Server-client handshake
 def handshake(msg: RecvMsg):
     print("Client Has said buffer size is:", msg.message)
     req = makeRequest([Requests.handshake.value], c_buffer.to_bytes(2, "little"))
     app_sendMsg(UDP_ss, req, msg.address)
 
+# givelist functionality
 def givelist(msg: RecvMsg):
     sendListTo(msg.address)
 
+# Request list of items from resources
+def sendListTo(addr):
+    list = listdir(resourcesPath)
+    sendList = "\n" + '\n'.join(list)
+    pck = Package(sendList)
+    initPckHandshake(pck, addr)
+
+# Request file to be read from resources
 def filereq(msg:RecvMsg):
     f = readFile(resourcesPath + "/" + msg.message)
     pck = Package(f)
     initPckHandshake(pck, msg.address)
-    #sendMessage(f, msg.address)
 
+# Add package to the list of packages that need to be sent
+# and keep it until fully sent (only 1 per client)
+def initPckHandshake(pck:Package, addr):
+    addToPckToSendList(pck,addr)
+    res = makeRequest([Requests.res.value, 0, pck.pt], bytes())
+    app_sendMsg(UDP_ss, res, addr)
+
+# Add package to the potential packages to send
 def addToPckToSendList(pck,addr):
+    # !!! ToDo only one package can be requested by a client, so
+    # each address can only be added once!
     ToSendPackageList.append((pck,addr))
 
-def sendMessage(msg, addr):
-    pck = Package(msg)
-    initPckHandshake(pck, addr)
-    pn = 1 # package counter
-    while(True):
-        print("server send pck nr ", pn)
-        req = makeRequest([Requests.req.value, pn, pck.pt], pck.getListItem(pn-1))
-        app_sendMsg(UDP_ss, req, addr)
-        print("server waiting to send next pck")
-        rMsg = RecvMsg(app_recvMsg(UDP_ss, s_buffer)).getRecvMsg()
-        if(rMsg.type == Requests.fullyreceived.value):
-            print("last sent: ", pck.getListItem(pn-1))
-            break
-        print("server received request for pck nr ", rMsg.pn)
-        pn = rMsg.pn
-    print("server finished sending msg")
-
+# Request a packet from the package list
 def pckRequest(msg:RecvMsg):
     pck:Package = findInPckList(msg.address)[0] # first in tuple is msg
     res = makeRequest([Requests.res.value, msg.pn, pck.pt], pck.getListItem(msg.pn-1))
     app_sendMsg(UDP_ss, res, msg.address)
 
+# Request for once client fully received to remove from the packet list
+def removeFromPckList(msg:RecvMsg):
+    ToSendPackageList.remove(findInPckList(msg.address))
+    req = makeRequest([Requests.fullyreceived.value], bytes())
+    app_sendMsg(UDP_ss, req, msg.address)
+
+# Find package in the package list
 def findInPckList(addr):
     item:PckListItem
     for item in ToSendPackageList:
@@ -111,21 +121,11 @@ def findInPckList(addr):
             return item
     return None
 
-def removeFromPckList(msg:RecvMsg):
-    ToSendPackageList.remove(findInPckList(msg.address))
-    req = makeRequest([Requests.fullyreceived.value], bytes())
-    app_sendMsg(UDP_ss, req, msg.address)
 
-def sendListTo(addr):
-    list = listdir(resourcesPath)
-    sendList = "\n" + '\n'.join(list)
-    pck = Package(sendList)
-    initPckHandshake(pck, addr)
 
-def initPckHandshake(pck:Package, addr):
-    addToPckToSendList(pck,addr)
-    res = makeRequest([Requests.res.value, 0, pck.pt], bytes())
-    app_sendMsg(UDP_ss, res, addr)
+
+
+
 
 #******************************************************************#
 #******************************************************************#

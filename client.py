@@ -53,6 +53,7 @@ def client_msgManager(input):
 #####################################
 #           Functionality           #
 #####################################
+# Client to server handshake
 def handshake():
     req = makeRequest([Requests.handshake.value], s_buffer.to_bytes(2, "little"))
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
@@ -65,29 +66,30 @@ def handshake():
         print(e)
         handshake()
 
-# Give list functionality
+# givelist functionality
 def givelist(input):
-    req = makeRequest([input], bytes()) # get list
+    # get list
+    req = makeRequest([input], bytes()) 
     ServerItemsList = receivePckFromServer(newReq(req, Requests.res.value))
     print(f"{ServerItemsList[1]}: {ServerItemsList[0]}")
-    #app_sendMsg(UDPClientSocket, req, ConnectionPort)
-    #ServerItemsList = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
-    #print(f"{ServerItemsList.port}: {ServerItemsList.message}")
 
+    # Which item to get from server
+    # !!! ToDo only be able to request items on list!
     print("which item would you like (enter filename exactly)")
     input = app_input()
-    # ToDo - check that input is in the list of items returned! Otherwise ask again
 
+    # request file from the server
     req = makeRequest([Requests.filereq.value], str.encode(input))
     recv_pck = receivePckFromServer(receivePckHandshake(req))
     print(f"{recv_pck[1]}: {recv_pck[0]}")
 
+# Packet Handshake
 def receivePckHandshake(req):
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
     return RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
 
+# Loop until all packets received
 def receivePckFromServer(initPck: RecvMsg):
-    print("init pck size is : ", initPck.pt)
     totalMsg = bytes()
     pn = 1
     while(pn <= initPck.pt):
@@ -99,12 +101,11 @@ def receivePckFromServer(initPck: RecvMsg):
     res = newReq(req, Requests.fullyreceived.value)
 
     return (totalMsg.decode("utf-8"), res.address)
-        
 
+# Request - Response functionality
 def waitRes(res:Request, req) -> RecvMsg:
     try:
         rMsg = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
-        #print("received msg type", rMsg.type, " required type ", res)
         if(rMsg.type == res):
             return rMsg
         else:   # received wrong response type from server!
@@ -116,31 +117,6 @@ def waitRes(res:Request, req) -> RecvMsg:
 def newReq(req, res:Request) -> RecvMsg:
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
     return waitRes(res, req)
-
-#parse message
-def receivePck(initPck: RecvMsg):
-    UDPClientSocket.settimeout(10)
-    totalMsg = bytes()
-    pn = 0
-    while(pn <= initPck.pt):
-        print("client wait for next pck")
-        rMsg = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
-        print("client received pck nr ", rMsg.pn)
-        totalMsg += rMsg.bytes
-        if(pn != initPck.pt):
-            res = makeRequest([Requests.res.value, rMsg.pn+1], bytes())
-            print("client requesting pck nr ", rMsg.pn + 1)
-            app_sendMsg(UDPClientSocket, res, ConnectionPort)
-
-        pn = rMsg.pn + 1
-
-    res = makeRequest([Requests.fullyreceived.value], bytes())
-    app_sendMsg(UDPClientSocket, res, ConnectionPort)
-    print("last received: ", rMsg.message)
-    print("client msg complete")
-    return totalMsg.decode("utf-8")
-
-
 
 #******************************************************************#
 #******************************************************************#

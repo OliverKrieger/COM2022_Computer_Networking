@@ -9,21 +9,13 @@ headerSize = 8
 #########################################
 # Requests
 #########################################
-# 1 = handshake - message contains buffer size
-# 2 = response - message contains response
-    # 21 = message response received
-# 3 = request - message contains request value
-    # 31 = givelist - gives a list of files user has
-
 class Requests(Enum):
     handshake= 1
     res= 2
-    responsereceived= 21
     fullyreceived= 22
     req= 3
     givelist= 31
     filereq = 32
-    packagereq = 33
 
 #########################################
 # Funcions
