@@ -1,5 +1,6 @@
 import socket
 import sys
+from urllib.request import Request
 from numpy import byte
 
 from sympy import EX
@@ -36,6 +37,7 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 #####################################
 def client_init():
     handshake()
+    UDPClientSocket.settimeout(10)
     while(True):
         input = app_input()
         client_msgManager(input)
@@ -66,21 +68,55 @@ def handshake():
 # Give list functionality
 def givelist(input):
     req = makeRequest([input], bytes()) # get list
-    app_sendMsg(UDPClientSocket, req, ConnectionPort)
-    ServerItemsList = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
-    print(f"{ServerItemsList.port}: {ServerItemsList.message}")
+    ServerItemsList = receivePckFromServer(newReq(req, Requests.res.value))
+    print(f"{ServerItemsList[1]}: {ServerItemsList[0]}")
+    #app_sendMsg(UDPClientSocket, req, ConnectionPort)
+    #ServerItemsList = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
+    #print(f"{ServerItemsList.port}: {ServerItemsList.message}")
 
     print("which item would you like (enter filename exactly)")
     input = app_input()
     # ToDo - check that input is in the list of items returned! Otherwise ask again
 
-    recv_pck = receivePck(receivePckHandshake(input))
-    print(f"{ServerItemsList.port}: {recv_pck}")
-
-def receivePckHandshake(input):
     req = makeRequest([Requests.req.value], str.encode(input))
+    recv_pck = receivePckFromServer(receivePckHandshake(req))
+    print(f"{recv_pck[1]}: {recv_pck[0]}")
+
+def receivePckHandshake(req):
     app_sendMsg(UDPClientSocket, req, ConnectionPort)
     return RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
+
+def receivePckFromServer(initPck: RecvMsg):
+    print("init pck size is : ", initPck.pt)
+    totalMsg = bytes()
+    pn = 1
+    while(pn <= initPck.pt):
+        print("Client request next pck")
+        req = makeRequest([Requests.req.value, pn], bytes())
+        totalMsg += newReq(req, Requests.res.value).bytes
+        pn += 1
+
+    req = makeRequest([Requests.fullyreceived.value], bytes())
+    res = newReq(req, Requests.fullyreceived.value)
+
+    return (totalMsg.decode("utf-8"), res.address)
+        
+
+def waitRes(res:Request, req) -> RecvMsg:
+    try:
+        rMsg = RecvMsg(app_recvMsg(UDPClientSocket, c_buffer)).getRecvMsg()
+        #print("received msg type", rMsg.type, " required type ", res)
+        if(rMsg.type == res):
+            return rMsg
+        else:   # received wrong response type from server!
+            waitRes(res, req)
+    except Exception as e: # failed to get in time, so request again
+        print(e)
+        newReq(req, res)
+
+def newReq(req, res:Request) -> RecvMsg:
+    app_sendMsg(UDPClientSocket, req, ConnectionPort)
+    return waitRes(res, req)
 
 #parse message
 def receivePck(initPck: RecvMsg):

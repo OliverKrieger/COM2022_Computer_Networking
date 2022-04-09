@@ -22,7 +22,8 @@ class Requests(Enum):
     fullyreceived= 22
     req= 3
     givelist= 31
-
+    filereq = 32
+    packagereq = 33
 
 #########################################
 # Funcions

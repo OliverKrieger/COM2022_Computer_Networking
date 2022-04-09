@@ -34,6 +34,13 @@ class Package: # package
     def getListItem(self, index):
         return self.list[index]
 
+class PckListItem:
+    def __init__(self, pck, addr):
+        self.pck = pck
+        self.addr = addr
+
+    def getListMsg(self):
+        return self
 
 #####################################
 #        Basic Functionality        #
