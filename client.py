@@ -74,7 +74,6 @@ def givelist(input):
     print(f"{ServerItemsList[1]}: {ServerItemsList[0]}")
 
     # Which item to get from server
-    # !!! ToDo only be able to request items on list!
     print("which item would you like (enter filename exactly)")
     input = validateInput(app_input(), ServerItemsList[0])
 
