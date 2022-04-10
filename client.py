@@ -76,12 +76,21 @@ def givelist(input):
     # Which item to get from server
     # !!! ToDo only be able to request items on list!
     print("which item would you like (enter filename exactly)")
-    input = app_input()
+    input = validateInput(app_input(), ServerItemsList[0])
 
     # request file from the server
     req = makeRequest([Requests.filereq.value], str.encode(input))
     recv_pck = receivePckFromServer(receivePckHandshake(req))
     print(f"{recv_pck[1]}: {recv_pck[0]}")
+
+def validateInput(input, checkList):
+    values = checkList.split("\n")
+    while(True):
+        for i in values:
+            if(input == i):
+                return input
+        print("\nInput not in possible items list. Please enter (exactly) one of the following:", checkList)
+        input = app_input()
 
 # Packet Handshake
 def receivePckHandshake(req):
