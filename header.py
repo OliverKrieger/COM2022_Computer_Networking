@@ -1,48 +1,53 @@
 from enum import Enum
-from constants import c_buffer, s_buffer
 
-bufferSize = 32
+headerSize = 19
 
-# total size
-headerSize = 8
+#####################################
+# Classes
+#####################################
+class Header:
+    def __init__(self):
+        self.chks = 0
+        self.mt = 0
+        self.si = 0
+        self.lsi = 0
+        self.fi = 0
+        self.bl = 0
+        self.bytes = 0
 
-#########################################
-# Requests
-#########################################
-class Requests(Enum):
-    handshake= 1
-    res= 2
-    fullyreceived= 22
-    req= 3
-    givelist= 31
-    filereq = 32
+    def set_header_bytes(self, head:bytes):
+        self.chks = int.from_bytes(head[1:4], "little")
+        self.mt = int.from_bytes(head[4:5], "little")
+        self.si = int.from_bytes(head[5:9], "little")
+        self.lsi = int.from_bytes(head[9:13], "little")
+        self.fi = int.from_bytes(head[13:17], "little")
+        self.bl = int.from_bytes(head[17:19], "little")
+        #print("chks ", self.chks, ", mt ", self.mt, ", si ", self.si, ", lsi ", self.lsi, ", fi ", self.fi, ", bl ", self.bl)
+        self.bytes = head
 
-#########################################
-# Funcions
-#########################################
-#def makeRequest(r: int, pck: int, m: str) -> str:
-def makeRequest(l: list, m: bytes = bytes()) -> bytes: # r = request, m = message
-    cnt = 1
-    r = 0 # request
-    pn = 0 # package number
-    pt = 0 # package total number
-    chks = 0 # checksum
-    for i in l:
-        if(cnt == 1) : r = i
-        if(cnt == 2) : pn = i
-        if(cnt == 3) : pt = i
-        if(cnt == 4) : chks = i
-        cnt += 1
+    def set_chks(self, v:int):
+        self.chks = v
 
-    if(int(r) > 255):
-        raise ValueError('Request message is', r, ' but maximum allowed size is: ', 255)
+    def set_mt(self, v:int):
+        self.mt = v
+
+    def set_si(self, v:int):
+        self.si = v
+
+    def set_lsi(self, v:int):
+        self.lsi = v
+
+    def set_fi(self, v:int):
+        self.fi = v
     
-    zeros = 0
-    # bufferSize
-    req = (r.to_bytes(1, 'little') 
-    + pn.to_bytes(1, 'little') 
-    + pt.to_bytes(1, 'little') 
-    + chks.to_bytes(1, 'little') 
-    + zeros.to_bytes(headerSize-4, 'little'))
-    return req + m
+    def set_bl(self, v:int):
+        self.bl = v
 
+    def get_header_bytes(self) -> bytes():
+        h:bytes = (self.chks.to_bytes(4, 'little') 
+        + self.mt.to_bytes(1, 'little') 
+        + self.si.to_bytes(4, 'little') 
+        + self.lsi.to_bytes(4, 'little')
+        + self.fi.to_bytes(4, 'little') 
+        + self.bl.to_bytes(2, 'little'))
+        return h
