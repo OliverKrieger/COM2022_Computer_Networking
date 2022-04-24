@@ -8,7 +8,7 @@ resourcesPath = "./resources"
 
 localIP:str = "127.0.0.1"
 sendIP:str = "127.0.0.1"
-ConnectionPort:Optional[str] = None
+ConnectionPort:Optional[int] = None
 ConnectionAddress = (sendIP, ConnectionPort)
-BindPort:Optional[str] = None
+BindPort:Optional[int] = None
 BindAddress = (localIP, BindPort)

@@ -25,6 +25,8 @@ def server_loop(socket:socket.socket):
         s_handle(Msg(S_S_Manager.a_recvMsg()))
 
 def s_handle(msg:Msg):
-    if(msg.header.fi == 0):
-        if(S_S_Manager is not None):
-            server_handlers.handle_file_request(S_S_Manager, msg)
+    if(S_S_Manager is not None):
+        if(msg.header.fi == 0):
+                server_handlers.handle_resources_request(S_S_Manager, msg)
+        elif(msg.header.fi != 0):
+                server_handlers.handle_resource_index_request(S_S_Manager, msg)

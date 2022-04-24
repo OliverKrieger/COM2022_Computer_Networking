@@ -28,6 +28,10 @@ def client_loop(socket:socket.socket):
     print("finished client loop...")
 
 def c_handle(input:str):
-    if(input == "list"):
-        if(C_S_Manager is not None):
+    if(C_S_Manager is not None):
+        if(input == "list"):
             client_handlers.handle_resource_listing(C_S_Manager)
+        elif(input == "get"):
+            client_handlers.handle_get_resource(C_S_Manager)
+        else:
+            print("Sorry, did not understand input\n")
