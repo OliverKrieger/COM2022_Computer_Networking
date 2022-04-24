@@ -1,10 +1,12 @@
 import socket
+from typing import * 
+
 from utils import a_input, Socket_Manager
 import config
 import client_handlers
 
-UDP_cs:socket.socket = None
-C_S_Manager:Socket_Manager = None
+UDP_cs:Optional[socket.socket] = None
+C_S_Manager:Optional[Socket_Manager] = None
 
 def client_loop(socket:socket.socket):
     global UDP_cs
@@ -12,9 +14,6 @@ def client_loop(socket:socket.socket):
 
     UDP_cs = socket
     C_S_Manager = Socket_Manager(UDP_cs, config.s_bfr_size)
-
-    print("request resource list")
-    
 
     print("Start client loop...")
 
@@ -30,4 +29,5 @@ def client_loop(socket:socket.socket):
 
 def c_handle(input:str):
     if(input == "list"):
-        client_handlers.handle_resource_listing(C_S_Manager)
+        if(C_S_Manager is not None):
+            client_handlers.handle_resource_listing(C_S_Manager)

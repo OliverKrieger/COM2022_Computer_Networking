@@ -16,7 +16,7 @@ class Header:
         self.bytes = 0
 
     def set_header_bytes(self, head:bytes):
-        self.chks = int.from_bytes(head[1:4], "little")
+        self.chks = int.from_bytes(head[0:4], "little")
         self.mt = int.from_bytes(head[4:5], "little")
         self.si = int.from_bytes(head[5:9], "little")
         self.lsi = int.from_bytes(head[9:13], "little")
@@ -43,7 +43,7 @@ class Header:
     def set_bl(self, v:int):
         self.bl = v
 
-    def get_header_bytes(self) -> bytes():
+    def get_header_bytes(self) -> bytes:
         h:bytes = (self.chks.to_bytes(4, 'little') 
         + self.mt.to_bytes(1, 'little') 
         + self.si.to_bytes(4, 'little') 

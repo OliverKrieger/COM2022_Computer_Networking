@@ -22,7 +22,7 @@ class Socket_Manager:
         print("new request to address ", address)
         self.socket.sendto(m, address)
 
-    def a_request_until_finished(self, head:Header, m:bytes(), addr):
+    def a_request_until_finished(self, head:Header, m:bytes, addr):
         total = bytes()
         while(head.si != head.lsi):
             # ToDO if want to send multi packet messages, then MUST remake header (otherwise return always has greater last slice 
@@ -50,7 +50,7 @@ class ReqManager:
             return rMsg
         except Exception as e: # failed to get in time, so request again
             print(e)
-            self.newReq(r, adr)
+            return self.newReq(r, adr)
 
     def newReq(self, r:Req, adr:tuple) -> Msg:
         self.sm.a_sendMsg(r.get_bytes(), adr)
@@ -72,7 +72,7 @@ def a_input():
     Msg = str(input()) # guarantees input is returned in string format
     return Msg
 
-def a_input_validation(input:str, checkList:list):
+def a_input_validation(input:str, checkList:str):
     values = checkList.split("\n")
     while(True):
         for i in values:
