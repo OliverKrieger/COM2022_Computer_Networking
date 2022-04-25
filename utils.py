@@ -16,11 +16,20 @@ class Socket_Manager:
         self.req_manager = ReqManager(self)
 
     def a_recvMsg(self):
-        return SocketMsg(self.socket.recvfrom(self.bfr_size))
+        res:SocketMsg = SocketMsg(self.socket.recvfrom(self.bfr_size))
+        m = Msg(res)
+        chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
+        if(m.header.chks != chks):
+            print("received chks", m.header.chks, "and calc chks ", chks)
+            raise ValueError("package is corrupted, it has a wrong checksum.")
+        return res
 
-    def a_sendMsg(self, m: bytes, address: tuple):
-        print("new request to address ", address)
-        self.socket.sendto(m, address)
+    def a_sendMsg(self, r: Req, address: tuple):
+        print("new package to address ", address)
+        chks = calculateChks(r.get_bytes()[4:]) # calculate checksum to anything but checksum itself
+        print("calculated checksum ", chks)
+        r.head.set_chks(chks)
+        self.socket.sendto(r.get_bytes(), address)
 
     def a_request_until_finished(self, head:Header, m:bytes, addr):
         total = bytes()
@@ -48,12 +57,12 @@ class ReqManager:
             rMsg = Msg(self.sm.a_recvMsg())
             print("response from server")
             return rMsg
-        except Exception as e: # failed to get in time, so request again
+        except Exception as e: # failed to get in time, so request again OR wrong checksum, so requesting again
             print(e)
             return self.newReq(r, adr)
 
     def newReq(self, r:Req, adr:tuple) -> Msg:
-        self.sm.a_sendMsg(r.get_bytes(), adr)
+        self.sm.a_sendMsg(r, adr)
         return self.waitRes(r, adr)
 
 class Package: # package
@@ -88,3 +97,9 @@ def getPackageNumber(package: bytes, msg_Size:int) -> int:
 def splitPackage(pck:bytes, msg_Size:int) -> list:
     n:int = getPackageNumber(pck, msg_Size)
     return [pck[x*msg_Size:(x+1)*msg_Size] for x in range(n)]
+
+def calculateChks(byte_arr:bytes):
+    lrc = 0
+    for b in byte_arr:
+        lrc = (lrc+b) & 0xFFFFFFFF
+    return ((lrc ^ 0xFFFFFFFF) + 1) & 0xFFFFFFFF

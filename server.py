@@ -22,7 +22,11 @@ def server_loop(socket:socket.socket):
     print("Start server loop...")
     
     while(True):
-        s_handle(Msg(S_S_Manager.a_recvMsg()))
+        try:
+            s_handle(Msg(S_S_Manager.a_recvMsg()))
+        except ValueError as e:
+            print(e)
+
 
 def s_handle(msg:Msg):
     if(S_S_Manager is not None):

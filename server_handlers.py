@@ -12,12 +12,18 @@ fm:FileManager = FileManager()
 def handle_resources_request(S_S_Manager:Socket_Manager, msg:Msg):
     print("File list request received")
     pck:Package = create_resource_list(fm.files_as_str)
-    respond_slice(S_S_Manager, msg, pck)
+    try:
+        respond_slice(S_S_Manager, msg, pck)
+    except Exception as e:
+        print(e)
+        return
 
 def handle_resource_index_request(S_S_Manager:Socket_Manager, msg:Msg):
     print("Requesting resource number ", msg.header.fi, "for slice ", msg.header.si)
     pck:Package = fm.get_resource_as_pck(msg.header.fi-1, config.c_bfr_size)
     respond_slice(S_S_Manager, msg, pck)
+
+    
 
 def respond_slice(S_S_Manager:Socket_Manager, msg:Msg, pck:Package):
     head = Header()
@@ -25,8 +31,9 @@ def respond_slice(S_S_Manager:Socket_Manager, msg:Msg, pck:Package):
     head.set_si(msg.header.si)
     head.set_fi(msg.header.fi)
     head.set_lsi(len(pck.list))
-    req:Req = create_req(head, pck.getListItem(msg.header.si - 1))
-    S_S_Manager.a_sendMsg(req.bytes, msg.address)
+    r:Req = create_req(head, pck.getListItem(msg.header.si - 1))
+    S_S_Manager.a_sendMsg(r, msg.address)
+    
 
 def create_resource_list(fl_list:str) -> Package:
     return Package(fl_list, config.c_bfr_size)
