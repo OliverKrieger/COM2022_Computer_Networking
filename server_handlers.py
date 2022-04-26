@@ -35,7 +35,9 @@ def respond_slice(S_S_Manager:Socket_Manager, msg:Msg, pck:Package):
     head.set_si(msg.header.si)
     head.set_fi(msg.header.fi)
     head.set_lsi(len(pck.list))
-    r:Req = create_req(head, pck.getListItem(msg.header.si - 1))
+    p:bytes = pck.getListItem(msg.header.si - 1)
+    head.set_bl(len(p))
+    r:Req = create_req(head, p)
     S_S_Manager.a_sendMsg(r, msg.address)
     
 

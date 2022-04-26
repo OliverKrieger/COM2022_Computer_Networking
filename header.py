@@ -51,3 +51,6 @@ class Header:
         + self.fi.to_bytes(4, 'little') 
         + self.bl.to_bytes(2, 'little'))
         return h
+
+    def print_header(self) -> None:
+        print("header is:\nchks ", self.chks, ",\nmt ", self.mt, ",\nsi ", self.si, ",\nlsi ", self.lsi, ",\nfi ", self.fi, ",\nbl ", self.bl)
