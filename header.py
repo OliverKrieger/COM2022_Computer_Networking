@@ -53,4 +53,4 @@ class Header:
         return h
 
     def print_header(self) -> None:
-        print("header is:\nchks ", self.chks, ",\nmt ", self.mt, ",\nsi ", self.si, ",\nlsi ", self.lsi, ",\nfi ", self.fi, ",\nbl ", self.bl)
+        print("header is:\nchks ", self.chks, "\nmt ", self.mt, "\nsi ", self.si, "\nlsi ", self.lsi, "\nfi ", self.fi, "\nbl ", self.bl)

@@ -6,6 +6,8 @@ from requests import Req, create_req
 from header import Header, headerSize
 import config
 
+FailureCount = 0
+
 #####################################
 #              Classes              #
 #####################################
@@ -18,9 +20,15 @@ class Socket_Manager:
     def a_recvMsg(self):
         res:SocketMsg = SocketMsg(self.socket.recvfrom(self.bfr_size))
         m = Msg(res)
-        chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
+        #chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
+        chks = calculateChks(res.msg[4:])
+        print(res.msg)
+        # print("res bytes", res.msg[4:])
+        # print("msg bytes", m.header.get_header_bytes(), m.message)
         if(m.header.chks != chks):
-            print("received chks", m.header.chks, "and calc chks ", chks)
+            # print("received chks", m.header.chks, "and calc chks ", chks)
+            # print("header bytes\n", m.header.get_header_bytes() )
+            print("calc bytes ", chks.to_bytes(4, "little"))
             raise ValueError("package is corrupted, it has a wrong checksum.")
         return res
 
@@ -36,7 +44,11 @@ class Socket_Manager:
         while(head.si != head.lsi):
             # ToDO if want to send multi packet messages, then MUST remake header (otherwise return always has greater last slice 
             # index, even though its supposed to be 0)
-            res:Msg = self.req_manager.newReq(create_req(head, m), addr)
+            try:
+                res:Msg = self.req_manager.newReq(create_req(head, m), addr)
+            except ConnectionError as e:
+                print("Request Failure:", e)
+                raise ConnectionError("failed to request")
             print("res is", res)
             total += res.bytes
             head = res.header
@@ -53,12 +65,18 @@ class ReqManager:
 
     # Request - Response functionality
     def waitRes(self, r:Req, adr:tuple) -> Msg:
+        global FailureCount
         try:
             rMsg = Msg(self.sm.a_recvMsg())
             print("response from server")
+            FailureCount = 0 # reset failure count
             return rMsg
         except Exception as e: # failed to get in time, so request again OR wrong checksum, so requesting again
             print(e)
+            FailureCount += 1 # increase failure count by 1
+            if(FailureCount >= config.AllowedFailureTotal): # if cannot get within failure count, then assume connection dead or failure to get
+                FailureCount = 0 # reset failure count
+                raise ConnectionError("Exceeded failure count, unable to request")
             return self.newReq(r, adr)
 
     def newReq(self, r:Req, adr:tuple) -> Msg:
