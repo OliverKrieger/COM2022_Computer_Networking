@@ -7,6 +7,7 @@ from header import Header, headerSize
 class Types(Enum):
     req= 1
     res= 2
+    error= 8
 
 class Req:
     def __init__(self, r:bytes):

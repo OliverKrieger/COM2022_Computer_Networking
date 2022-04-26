@@ -75,6 +75,8 @@ class Package: # package
         return self
 
     def getListItem(self, index) -> bytes:
+        if(index > len(self.list)):
+            raise ValueError("Package list slice request out if bounds")
         return self.list[index]
 
 def a_input():
