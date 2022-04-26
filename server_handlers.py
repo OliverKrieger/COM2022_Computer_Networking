@@ -10,7 +10,7 @@ from file_manager import FileManager
 fm:FileManager = FileManager()
 
 def handle_resources_request(S_S_Manager:Socket_Manager, msg:Msg):
-    print("File list request received")
+    print("File list request received, requesting file, ", msg.header.fi, "with slice ", msg.header.si)
     pck:Package = create_resource_list(fm.files_as_str)
     try:
         respond_slice(S_S_Manager, msg, pck)

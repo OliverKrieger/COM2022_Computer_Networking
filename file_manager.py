@@ -30,7 +30,7 @@ class FileManager:
         return fl
 
     def list_as_str(self, fl:List[File]) -> str:
-        fl_str:str = "\n"
+        fl_str:str = ""
         i:File
         for i in fl:
             fl_str += str(i.index) + ":" + str(i.size) + ":" + str(i.name) + "\n"
