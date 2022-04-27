@@ -40,10 +40,16 @@ def handle_get_resource(s_manager:Socket_Manager) -> None:
         print("Requesting file index ", in_val)
     
         msg = request_index(s_manager, in_val)
-        print("should fail")
         print("File Value:\n", msg.decode("utf-8"))
     except ConnectionError as e:
         print(e)
+        #ToDo save the remaining fail message chunk here, because have access to validation manager!
+        print("Saving current retrieved message")
+        val = str(e).split(":")
+        print("split value ", val)
+        if(len(val) == 3):
+            if(validation_manager is not None):
+                validation_manager.saveFileFailure(int(val[1]), val[2])
         return
 
 def request_index(s_manager:Socket_Manager, index:int) -> bytes:

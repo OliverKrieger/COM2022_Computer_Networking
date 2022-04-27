@@ -20,15 +20,9 @@ class Socket_Manager:
     def a_recvMsg(self):
         res:SocketMsg = SocketMsg(self.socket.recvfrom(self.bfr_size))
         m = Msg(res)
-        #chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
-        chks = calculateChks(res.msg[4:])
-        print(res.msg)
-        # print("res bytes", res.msg[4:])
-        # print("msg bytes", m.header.get_header_bytes(), m.message)
+        chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
         if(m.header.chks != chks):
-            # print("received chks", m.header.chks, "and calc chks ", chks)
-            # print("header bytes\n", m.header.get_header_bytes() )
-            print("calc bytes ", chks.to_bytes(4, "little"))
+            print("received chks", m.header.chks, "and calc chks ", chks)
             raise ValueError("package is corrupted, it has a wrong checksum.")
         return res
 
@@ -37,6 +31,11 @@ class Socket_Manager:
         chks = calculateChks(r.get_bytes()[4:]) # calculate checksum to anything but checksum itself
         print("calculated checksum ", chks)
         r.head.set_chks(chks)
+        #FOR FAILURE TEST
+        if(config.TestFileSaveOnError == True):
+            if(r.head.si == 2):
+                r.head.set_chks(0)
+        #END TEST
         self.socket.sendto(r.get_bytes(), address)
 
     def a_request_until_finished(self, head:Header, m:bytes, addr):
@@ -48,8 +47,9 @@ class Socket_Manager:
                 res:Msg = self.req_manager.newReq(create_req(head, m), addr)
             except ConnectionError as e:
                 print("Request Failure:", e)
-                raise ConnectionError("failed to request")
-            print("res is", res)
+                # ToDO - save the current received message and packge to request to file
+                raise ConnectionError("failed to request file index", (":" + str(head.fi) + ":" + str(total)))
+            print("res type is ", res.header.mt)
             total += res.bytes
             head = res.header
             head.si = head.si + 1

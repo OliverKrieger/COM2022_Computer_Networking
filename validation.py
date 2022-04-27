@@ -1,6 +1,8 @@
 from typing import *
 
 from file_manager import File
+from message import Msg
+import config
 
 #####################################
 #              Classes              #
@@ -36,4 +38,20 @@ class ValidationManager:
         except ValueError as e:
             print(e)
             return False
-        
+
+    def find_valid_file(self, file_index:int):
+        for i in self.valid_file_list:
+            if(i.index == file_index):
+                return i
+        raise FileNotFoundError("Could not find file with index ", file_index)
+
+    def saveFileFailure(self, fi:int, msg:str) -> None:
+        try:
+            fl:File = self.find_valid_file(fi)
+        except FileNotFoundError as e:
+            print("failed to find file: ", e)
+            return
+        fl_path = config.resourceFailurePath + "/" + fl.name
+        print("File path is: ", fl_path)
+        f = open(fl_path, "w+")
+        f.write(msg)
