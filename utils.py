@@ -40,16 +40,17 @@ class Socket_Manager:
         self.socket.sendto(r.get_bytes(), address)
 
     def a_request_until_finished(self, head:Header, m:bytes, addr) -> bytes:
-        total = bytes()
+        total:bytes = m
+        print("starting total ", m.decode("utf-8"))
         while(head.si != head.lsi):
             # ToDO if want to send multi packet messages, then MUST remake header (otherwise return always has greater last slice 
             # index, even though its supposed to be 0)
             try:
-                res:Msg = self.req_manager.newReq(create_req(head, m), addr)
+                res:Msg = self.req_manager.newReq(create_req(head, bytes()), addr)
             except ConnectionError as e:
                 print("Request Failure:", e)
                 # ToDO - save the current received message and packge to request to file
-                raise ConnectionError("failed to request file index", (":" + str(head.fi) + ":" + str(total)))
+                raise CustomConnectionError("failed to request file index", head.fi, total)
             print("res type is ", res.header.mt)
             total += res.bytes
             head = res.header
@@ -130,3 +131,16 @@ def createPaths():
         os.makedirs(config.resourcesPath)
     if not os.path.exists(config.resourceFailurePath):
         os.makedirs(config.resourceFailurePath)
+
+class CustomConnectionError(Exception):
+    def __init__(self, *args):
+        if args:
+            self.error = args[0]
+            self.fi = args[1]
+            self.bytes = args[2]
+        
+    def __str__(self):
+        if self.error:
+            return "Custom connection error, {0}".format(self.error)
+        else:
+            return "Custom connection error"

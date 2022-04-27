@@ -32,6 +32,6 @@ def c_handle(input:str):
         if(input == "get"):
             client_handlers.handle_get_resource(C_S_Manager)
         elif(input == "rr"):
-            client_handlers.handle_re_request(C_S_Manager)
+            client_handlers.handle_re_request_check(C_S_Manager)
         else:
             print("Sorry, did not understand input\n")

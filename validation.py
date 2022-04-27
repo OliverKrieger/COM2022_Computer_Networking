@@ -26,13 +26,13 @@ class ValidationManager:
     def get_valid_file_list(self):
         return self.valid_file_list
 
-    def validate_file_index_input(self, input:str) -> bool:
+    def validate_file_index_input(self, input:str, index_list:List[int]) -> bool:
         try:
             in_val = int(input)
             print("input is ", in_val)
-            for i in self.valid_file_list:
-                print("is  ", i.index, "equal to", in_val)
-                if(i.index == in_val):
+            for i in index_list:
+                print("is  ", i, "equal to", in_val)
+                if(i == in_val):
                     print("is equal")
                     return True
             print("no values match")
@@ -47,7 +47,20 @@ class ValidationManager:
                 return i
         raise FileNotFoundError("Could not find file with index ", file_index)
 
-    def saveFileFailure(self, fi:int, msg:str) -> None:
+    def find_valid_file_by_name(self, file_name:str):
+        for i in self.valid_file_list:
+            if(i.name == file_name):
+                return i
+        raise FileNotFoundError("Could not find file with name ", file_name)
+
+    def find_valid_failure_file(self, file_index:int):
+        ffl:List[FailureFile] = self.getFailureList()
+        for i in ffl:
+            if(i.index == file_index):
+                return i
+        raise FileNotFoundError("Could not find file with index ", file_index)
+
+    def saveFileFailure(self, fi:int, msg:bytes) -> None:
         try:
             fl:File = self.find_valid_file(fi)
         except FileNotFoundError as e:
@@ -55,8 +68,8 @@ class ValidationManager:
             return
         fl_path = config.resourceFailurePath + "/" + fl.name
         print("File path is: ", fl_path)
-        f = open(fl_path, "w+")
-        f.write(msg)
+        with open(fl_path, "wb") as f:
+            f.write(msg)
 
     def getFailureList(self) -> List[FailureFile]:
         l:List = os.listdir(config.resourceFailurePath)
@@ -66,6 +79,7 @@ class ValidationManager:
         for i in l:
             fp:str = config.resourceFailurePath + "/" + i 
             s = open(fp, "r").read()
-            si = getPackageNumber(s.encode(), act_bfr_size) # slice index we stopped on, as will msg total will be current read msg
-            ffl.append(FailureFile(cnt,i,si))
+            print("current saved size", len(s))
+            si = getPackageNumber(s.encode(), act_bfr_size) + 1 # slice index we stopped on, as will msg total will be current read msg. +1 for the next slice
+            ffl.append(FailureFile(cnt,i,si,s.encode()))
         return ffl
