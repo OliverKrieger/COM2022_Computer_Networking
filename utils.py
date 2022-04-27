@@ -1,5 +1,6 @@
 import socket
 import math
+import os
 
 from message import SocketMsg, Msg
 from requests import Req, create_req
@@ -123,3 +124,9 @@ def calculateChks(byte_arr:bytes):
     for b in byte_arr:
         lrc = (lrc+b) & 0xFFFFFFFF
     return ((lrc ^ 0xFFFFFFFF) + 1) & 0xFFFFFFFF
+
+def createPaths():
+    if not os.path.exists(config.resourcesPath):
+        os.makedirs(config.resourcesPath)
+    if not os.path.exists(config.resourceFailurePath):
+        os.makedirs(config.resourceFailurePath)

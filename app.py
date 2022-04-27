@@ -3,6 +3,7 @@ from client_manager import client_init
 from server_manager import server_init
 import sys
 import config
+import utils
 
 if __name__ == '__main__':
 
@@ -21,6 +22,8 @@ if __name__ == '__main__':
     else:
         config.BindPort = int(input("\nEnter port we are binding our server to: "))
         config.BindAddress = (config.localIP, config.BindPort)
+
+    utils.createPaths()
     
     Thread(target = server_init).start()
     Thread(target = client_init).start()
