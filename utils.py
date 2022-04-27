@@ -39,7 +39,7 @@ class Socket_Manager:
         #END TEST
         self.socket.sendto(r.get_bytes(), address)
 
-    def a_request_until_finished(self, head:Header, m:bytes, addr):
+    def a_request_until_finished(self, head:Header, m:bytes, addr) -> bytes:
         total = bytes()
         while(head.si != head.lsi):
             # ToDO if want to send multi packet messages, then MUST remake header (otherwise return always has greater last slice 
@@ -111,13 +111,13 @@ def a_input_validation(input:str, checkList:str):
         print("\nInput not in possible items list. Please enter (exactly) one of the following:", checkList)
         input = a_input()
 
-def getPackageNumber(package: bytes, msg_Size:int) -> int:
-    packageNumber:int = int(math.ceil(len(package) / msg_Size))
+def getPackageNumber(package: bytes, actual_bfr_size:int) -> int:
+    packageNumber:int = int(math.ceil(len(package) / actual_bfr_size))
     return packageNumber
 
-def splitPackage(pck:bytes, msg_Size:int) -> list:
-    n:int = getPackageNumber(pck, msg_Size)
-    return [pck[x*msg_Size:(x+1)*msg_Size] for x in range(n)]
+def splitPackage(pck:bytes, actual_bfr_size:int) -> list:
+    n:int = getPackageNumber(pck, actual_bfr_size)
+    return [pck[x*actual_bfr_size:(x+1)*actual_bfr_size] for x in range(n)]
 
 def calculateChks(byte_arr:bytes):
     lrc = 0

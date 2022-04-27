@@ -12,6 +12,12 @@ class File:
         self.index = i
         self.size = s
         self.name = n
+
+class FailureFile:
+    def __init__(self, i:int, n:str, sfo:int):
+        self.index = i
+        self.name = n
+        self.slice_failed_on = sfo
         
 class FileManager:
     def __init__(self):

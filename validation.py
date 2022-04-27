@@ -1,8 +1,10 @@
 from typing import *
 
-from file_manager import File
-from message import Msg
+from file_manager import File, FailureFile
 import config
+import os
+from utils import getPackageNumber
+from header import headerSize
 
 #####################################
 #              Classes              #
@@ -55,3 +57,15 @@ class ValidationManager:
         print("File path is: ", fl_path)
         f = open(fl_path, "w+")
         f.write(msg)
+
+    def getFailureList(self) -> List[FailureFile]:
+        l:List = os.listdir(config.resourceFailurePath)
+        ffl:List[FailureFile] = []
+        cnt = 0
+        act_bfr_size = config.c_bfr_size - headerSize
+        for i in l:
+            fp:str = config.resourceFailurePath + "/" + i 
+            s = open(fp, "r").read()
+            si = getPackageNumber(s.encode(), act_bfr_size) # slice index we stopped on, as will msg total will be current read msg
+            ffl.append(FailureFile(cnt,i,si))
+        return ffl

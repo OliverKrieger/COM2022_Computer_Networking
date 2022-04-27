@@ -20,4 +20,4 @@ BindAddress = (localIP, BindPort)
 AllowedFailureTotal = 1
 
 # Tests
-TestFileSaveOnError = False
+TestFileSaveOnError = True # test if we only receive one packet and save it. Also tests that checksum validation works

@@ -2,11 +2,10 @@ from typing import *
 
 import requests
 from utils import Socket_Manager, a_input
-from message import Msg
-from requests import Req, create_req
 from header import Header
 import config
 from validation import ValidationManager
+from file_manager import FailureFile
 
 validation_manager:Optional[ValidationManager] = None
 
@@ -51,6 +50,16 @@ def handle_get_resource(s_manager:Socket_Manager) -> None:
             if(validation_manager is not None):
                 validation_manager.saveFileFailure(int(val[1]), val[2])
         return
+
+def handle_re_request(s_manager:Socket_Manager):
+    validate_validation_manager(s_manager)
+    if(validation_manager is not None):
+        ffl:List[FailureFile] = validation_manager.getFailureList()
+        if(len(ffl) > 0):
+            for i in ffl:
+                print("[", i.index, "]", i.name, "failed on slice ", i.slice_failed_on)
+        else:
+            print("No files to re-request!")
 
 def request_index(s_manager:Socket_Manager, index:int) -> bytes:
     head = Header()
