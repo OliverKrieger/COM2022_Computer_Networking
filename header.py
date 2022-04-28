@@ -22,7 +22,6 @@ class Header:
         self.lsi = int.from_bytes(head[9:13], "little")
         self.fi = int.from_bytes(head[13:17], "little")
         self.bl = int.from_bytes(head[17:19], "little")
-        #print("chks ", self.chks, ", mt ", self.mt, ", si ", self.si, ", lsi ", self.lsi, ", fi ", self.fi, ", bl ", self.bl)
         self.bytes = head
 
     def set_chks(self, v:int):

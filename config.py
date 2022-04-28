@@ -11,13 +11,14 @@ localIP:str = "127.0.0.1"
 sendIP:str = "127.0.0.1"
 # localIP:str = "10.77.38.136"
 # sendIP:str = "10.77.100.203"
-# sendIP:str = "10.77.47.75"
-ConnectionPort:Optional[int] = None
+ConnectionPort:Optional[int] = None # port we are sending to
 ConnectionAddress = (sendIP, ConnectionPort)
-BindPort:Optional[int] = None
+BindPort:Optional[int] = None # also local port
 BindAddress = (localIP, BindPort)
 
-AllowedFailureTotal = 1
+AllowedFailureTotal = 5 # number of times a request-response can fail before stopping communications
+
+ExtensionMode = False # to run extensions
 
 # Tests
 TestFileSaveOnError = False # test if we only receive one packet and save it. Also tests that checksum validation works

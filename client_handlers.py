@@ -129,9 +129,6 @@ def validate_validation_manager(s_manager:Socket_Manager) -> None:
 
 def saveOnFailure(e:CustomConnectionError):
     print("Saving current retrieved message")
-    # val = str(e).split(":") 
-    # print("split value ", val)
-    # if(len(val) == 3):
     if(validation_manager is not None):
         validation_manager.saveFileFailure(int(e.fi), e.bytes)
     else:

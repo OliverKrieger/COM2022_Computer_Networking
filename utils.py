@@ -57,7 +57,6 @@ class Socket_Manager:
                 res:Msg = self.req_manager.newReq(create_req(head, bytes()), addr)
             except ConnectionError as e:
                 print("Request Failure:", e)
-                # ToDO - save the current received message and packge to request to file
                 raise CustomConnectionError("failed to request file index", head.fi, total)
             print("res type is ", res.header.mt)
             total += res.bytes

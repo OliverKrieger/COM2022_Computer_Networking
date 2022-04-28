@@ -12,7 +12,7 @@ if __name__ == '__main__':
         config.ConnectionPort = int(sys.argv[1])
         config.ConnectionAddress = (config.sendIP, config.ConnectionPort)
     else:
-        config.ConnectionPort = int(input("\nEnter server port you want to connect to: "))
+        #config.ConnectionPort = int(input("\nEnter server port you want to connect to: "))
         config.ConnectionAddress = (config.sendIP, config.ConnectionPort)
 
     # What port are we binding to
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         config.BindPort = int(sys.argv[2])
         config.BindAddress = (config.localIP, config.BindPort)
     else:
-        config.BindPort = int(input("\nEnter port we are binding our server to: "))
+        #config.BindPort = int(input("\nEnter port we are binding our server to: "))
         config.BindAddress = (config.localIP, config.BindPort)
 
     utils.createPaths()
