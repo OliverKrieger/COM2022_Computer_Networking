@@ -21,3 +21,4 @@ AllowedFailureTotal = 1
 
 # Tests
 TestFileSaveOnError = False # test if we only receive one packet and save it. Also tests that checksum validation works
+TestUnknownRequest = False # test a request not known by types

@@ -3,7 +3,7 @@ import math
 import os
 
 from message import SocketMsg, Msg
-from requests import Req, create_req
+from requests import Req, create_req, Types
 from header import Header, headerSize
 import config
 
@@ -21,10 +21,18 @@ class Socket_Manager:
     def a_recvMsg(self):
         res:SocketMsg = SocketMsg(self.socket.recvfrom(self.bfr_size))
         m = Msg(res)
+        #FOR WRONG RESPONSE TEST
+        if(config.TestUnknownRequest == True):
+            m.header.set_mt(-1) # this should never be possible
+        #END TEST
+        if(validate_response(m) == False):
+            raise ValueError("ERROR - Unknown response type!")
+        if(m.header.mt == Types.error.value):
+            raise ValueError("ERROR - Server responded with an error, unable to process package!")
         chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
         if(m.header.chks != chks):
             print("received chks", m.header.chks, "and calc chks ", chks)
-            raise ValueError("package is corrupted, it has a wrong checksum.")
+            raise ValueError("ERROR - package is corrupted, it has a wrong checksum.")
         return res
 
     def a_sendMsg(self, r: Req, address: tuple):
@@ -144,3 +152,9 @@ class CustomConnectionError(Exception):
             return "Custom connection error, {0}".format(self.error)
         else:
             return "Custom connection error"
+
+def validate_response(m:Msg):
+    for item in Types:
+        if(m.header.mt == item.value):
+            return True
+    return False

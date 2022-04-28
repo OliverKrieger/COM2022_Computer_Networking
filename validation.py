@@ -1,3 +1,4 @@
+from asyncio import FastChildWatcher
 from typing import *
 
 from file_manager import File, FailureFile
@@ -5,6 +6,8 @@ import config
 import os
 from utils import getPackageNumber
 from header import headerSize
+from message import Msg
+from requests import Types
 
 #####################################
 #              Classes              #
@@ -65,6 +68,9 @@ class ValidationManager:
             fl:File = self.find_valid_file(fi)
         except FileNotFoundError as e:
             print("failed to find file: ", e)
+            return
+        if(len(msg) == 0):
+            print("nothing to save, as nothing was received!")
             return
         fl_path = config.resourceFailurePath + "/" + fl.name
         print("File path is: ", fl_path)
