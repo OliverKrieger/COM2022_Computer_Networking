@@ -1,8 +1,10 @@
 import os
 from typing import *
+import rsa
 
 from utils import Package
 import config
+from encryption_manager import EncryptionManager
 
 #####################################
 # Classes
@@ -44,8 +46,11 @@ class FileManager:
         print(fl_str)
         return fl_str
 
-    def get_resource_as_pck(self, res_index:int, bfr_size:int):
+    def get_resource_as_pck(self, res_index:int, bfr_size:int, em:EncryptionManager = None):
         f = readFile(config.resourcesPath + "/" + self.file_list[res_index].name)
+        if(em is not None and config.ExtensionMode == True):
+            b, tag = em.encrypt_message(f.encode(), em.connectionKey)
+            return Package(b, bfr_size)
         return Package(f, bfr_size)
 
     def get_fm(self):

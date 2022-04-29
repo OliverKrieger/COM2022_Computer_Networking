@@ -1,5 +1,6 @@
-from base64 import encode
-from os import listdir
+import rsa
+from typing import *
+from ast import literal_eval as make_tuple
 
 from utils import Package, Socket_Manager
 from header import Header
@@ -7,8 +8,11 @@ from requests import Req, Types, create_req
 from message import Msg
 import config
 from file_manager import FileManager
+from encryption_manager import EncryptionManager
 
 fm:FileManager = FileManager()
+em:EncryptionManager = EncryptionManager()
+clientPublicKey:Optional[rsa.PublicKey] = None
 
 def handle_resources_request(S_S_Manager:Socket_Manager, msg:Msg):
     print("File list request received, requesting file, ", msg.header.fi, "with slice ", msg.header.si)
@@ -50,3 +54,32 @@ def respond_error(S_S_Manager:Socket_Manager, error:str, addr):
     b:bytes = error.encode("utf-8")
     r:Req = create_req(head, b)
     S_S_Manager.a_sendMsg(r, addr)
+
+def handle_key_request(S_S_Manager:Socket_Manager, msg:Msg):
+    global em
+    global clientPublicKey
+    if(clientPublicKey is None):
+        print("nonce received ", msg.bytes)
+        # SHOULD add the public key from client
+        em.connectionNonce = msg.message
+        em.set_connection_key(msg.bytes)
+        #em.connectionPublicKey = rsa.PublicKey.load_pkcs1(msg.message)
+    print("server returns its nonce")
+    head = Header()
+    head.set_mt(Types.res.value)
+    # print("public key as str ", em.publicKey.__getstate__())
+    # b:bytes = str(em.publicKey.__getstate__()).encode()
+    b = str(em.localNonce).encode()
+    r:Req = create_req(head, b)
+    S_S_Manager.a_sendMsg(r, msg.address)
+
+def handle_request_with_encryption(S_S_Manager:Socket_Manager, msg:Msg):
+    print("Requesting number ", msg.header.fi, " with encryption for slice ", msg.header.si)
+    global em
+    try:
+        pck:Package = fm.get_resource_as_pck(msg.header.fi-1, config.c_bfr_size, em)
+        respond_slice(S_S_Manager, msg, pck)
+    except ValueError as e:
+        print(e)
+        error:str = "Requested slice " + str(msg.header.si) + " was out of bounds for resource index" + str(msg.header.fi)
+        respond_error(S_S_Manager, error, msg.address)

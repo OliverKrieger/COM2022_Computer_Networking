@@ -95,8 +95,12 @@ class ReqManager:
 class Package: # package
     def __init__(self, msg, bfr_size):
         self.msg_Size = bfr_size - headerSize
-        self.pt = getPackageNumber(bytes(msg, "utf-8"), self.msg_Size)
-        self.list = splitPackage(bytes(msg, "utf-8"), self.msg_Size)
+        if(type(msg) == bytes):
+            self.pt = getPackageNumber(msg, self.msg_Size)
+            self.list = splitPackage(msg, self.msg_Size)
+        else:
+            self.pt = getPackageNumber(bytes(msg, "utf-8"), self.msg_Size)
+            self.list = splitPackage(bytes(msg, "utf-8"), self.msg_Size)
 
     def getPck(self):
         return self

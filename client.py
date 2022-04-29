@@ -33,5 +33,9 @@ def c_handle(input:str):
             client_handlers.handle_get_resource(C_S_Manager)
         elif(input == "rr"):
             client_handlers.handle_re_request_check(C_S_Manager)
+        elif(input == "ek" and config.ExtensionMode == True):
+            client_handlers.handle_key_request(C_S_Manager)
+        elif(input == "gete" and config.ExtensionMode == True):
+            client_handlers.handle_get_resource_with_encryption(C_S_Manager)
         else:
             print("Sorry, did not understand input\n")

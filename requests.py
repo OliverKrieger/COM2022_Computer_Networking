@@ -8,6 +8,8 @@ class Types(Enum):
     req= 1
     res= 2
     error= 8
+    exchangeKey= 9
+    reqWEncrypt= 10
 
 class Req:
     def __init__(self, r:bytes):

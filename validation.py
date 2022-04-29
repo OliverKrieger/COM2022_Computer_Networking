@@ -6,8 +6,6 @@ import config
 import os
 from utils import getPackageNumber
 from header import headerSize
-from message import Msg
-from requests import Types
 
 #####################################
 #              Classes              #

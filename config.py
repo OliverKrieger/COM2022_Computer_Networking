@@ -18,7 +18,7 @@ BindAddress = (localIP, BindPort)
 
 AllowedFailureTotal = 5 # number of times a request-response can fail before stopping communications
 
-ExtensionMode = False # to run extensions
+ExtensionMode = True # to run extensions
 
 # Tests
 TestFileSaveOnError = False # test if we only receive one packet and save it. Also tests that checksum validation works

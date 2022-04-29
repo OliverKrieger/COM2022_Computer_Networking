@@ -7,8 +7,10 @@ from header import Header
 import config
 from validation import ValidationManager
 from file_manager import File, FailureFile
+from encryption_manager import EncryptionManager
 
 validation_manager:Optional[ValidationManager] = None
+em:EncryptionManager = EncryptionManager()
 
 def handle_resource_listing(s_manager:Socket_Manager) -> None:
     print("Requesting resource list...")
@@ -19,7 +21,7 @@ def handle_resource_listing(s_manager:Socket_Manager) -> None:
         print(e)
         return
 
-def handle_get_resource(s_manager:Socket_Manager) -> None:
+def handle_get_resource(s_manager:Socket_Manager, encrypt:bool = False) -> None:
     try:
         validate_validation_manager(s_manager)
 
@@ -44,7 +46,11 @@ def handle_get_resource(s_manager:Socket_Manager) -> None:
         print("Requesting file index ", in_val)
     
         msg = request_index(s_manager, in_val)
-        print("File Value:\n", msg.decode("utf-8"))
+        if(encrypt == True and config.ExtensionMode == True):
+            dec_msg = em.decrypt_message(msg)
+            print("File Value:\n", dec_msg.decode("utf-8"))
+        else:
+            print("File Value:\n", msg.decode("utf-8"))
     except CustomConnectionError as e:
         print(e)
         saveOnFailure(e)
@@ -106,9 +112,12 @@ def handle_re_request(s_manager:Socket_Manager, ffl:List[FailureFile]):
 
 
 def request_index(s_manager:Socket_Manager, file_index:int, slice_index:int = 1, msg_start_total = bytes()) -> bytes:
+    global em
     print("Request for resource ", file_index, " with start slice index ", slice_index)
     head = Header()
     head.set_mt(requests.Types.req.value)
+    if(em is not None and config.ExtensionMode == True):
+        head.set_mt(requests.Types.reqWEncrypt.value)
     head.set_si(slice_index)
     head.set_fi(file_index) 
     try:
@@ -134,3 +143,10 @@ def saveOnFailure(e:CustomConnectionError):
     else:
         print("unable to save fail failure!")
 
+def handle_key_request(s_manager:Socket_Manager):
+    global em
+    if(em is not None):
+        em.exchange_keys(s_manager)
+
+def handle_get_resource_with_encryption(s_manager:Socket_Manager):
+    handle_get_resource(s_manager, True)
