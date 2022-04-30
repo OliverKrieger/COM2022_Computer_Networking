@@ -1,6 +1,8 @@
 from enum import Enum
 
-headerSize = 19
+import config
+
+headerSize = config.headerSize
 
 #####################################
 # Classes

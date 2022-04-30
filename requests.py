@@ -1,5 +1,7 @@
 from enum import Enum
 
+from rsa import encrypt
+
 from header import Header, headerSize
 #########################################
 # Message Types
@@ -8,6 +10,8 @@ class Types(Enum):
     req= 1
     res= 2
     error= 8
+    exKeys= 9
+    encryptReq= 10
 
 class Req:
     def __init__(self, r:bytes):

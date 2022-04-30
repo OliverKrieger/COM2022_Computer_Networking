@@ -1,14 +1,17 @@
 from typing import *
 import os
 
+from message import Msg
 import requests
 from utils import Socket_Manager, a_input, CustomConnectionError
 from header import Header
 import config
 from validation import ValidationManager
 from file_manager import File, FailureFile
+from encryption_manager import *
 
 validation_manager:Optional[ValidationManager] = None
+em:Optional[EncryptionManager] = EncryptionManager()
 
 def handle_resource_listing(s_manager:Socket_Manager) -> None:
     print("Requesting resource list...")
@@ -21,6 +24,7 @@ def handle_resource_listing(s_manager:Socket_Manager) -> None:
 
 def handle_get_resource(s_manager:Socket_Manager) -> None:
     try:
+        handle_encrypt_exchange_keys(s_manager) # lazy request
         validate_validation_manager(s_manager)
 
         print("Enter file index you would like to request: ")
@@ -52,7 +56,9 @@ def handle_get_resource(s_manager:Socket_Manager) -> None:
 
 def handle_re_request_check(s_manager:Socket_Manager):
     try:
+        handle_encrypt_exchange_keys(s_manager) # lazy request
         validate_validation_manager(s_manager)
+        
         if(validation_manager is not None):
             ffl:List[FailureFile] = validation_manager.getFailureList()
             if(len(ffl) > 0):
@@ -109,9 +115,14 @@ def request_index(s_manager:Socket_Manager, file_index:int, slice_index:int = 1,
     print("Request for resource ", file_index, " with start slice index ", slice_index)
     head = Header()
     head.set_mt(requests.Types.req.value)
+    if(config.ExtensionMode == True and em is not None): # Specifically if we are in extension mode that does encryption!
+        head.set_mt(requests.Types.encryptReq.value)
     head.set_si(slice_index)
     head.set_fi(file_index) 
     try:
+        if(config.ExtensionMode == True and em is not None):
+            print("request with encryption")
+            return s_manager.a_request_until_finished(head, msg_start_total, config.ConnectionAddress, em)
         return s_manager.a_request_until_finished(head, msg_start_total, config.ConnectionAddress)
     except ConnectionError as e:
         print("request index", e)
@@ -134,3 +145,13 @@ def saveOnFailure(e:CustomConnectionError):
     else:
         print("unable to save fail failure!")
 
+def handle_encrypt_exchange_keys(s_manager:Socket_Manager):
+    global em
+    print("client requesting key exchange...")
+    if(config.ExtensionMode == True and em is not None and em.ConnectionFromServerKey == None):
+        head = Header()
+        head.set_mt(requests.Types.exKeys.value)
+        print("exported public key size ", len(em.export_public_key()))
+        msg:Msg = s_manager.req_manager.newReq(requests.create_req(head, em.export_public_key()), config.ConnectionAddress)
+        print("client received key exchange response")
+        em.set_sck(msg.bytes)

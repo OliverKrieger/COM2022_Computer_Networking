@@ -2,10 +2,13 @@ import socket
 import math
 import os
 
+from zmq import MSG_T_SIZE
+
 from message import SocketMsg, Msg
 from requests import Req, create_req, Types
 from header import Header, headerSize
 import config
+from encryption_manager import EncryptionManager
 
 FailureCount = 0
 
@@ -18,15 +21,20 @@ class Socket_Manager:
         self.bfr_size = bfr_size
         self.req_manager = ReqManager(self)
 
-    def a_recvMsg(self):
+    def a_recvMsg(self, em:EncryptionManager = None):
         res:SocketMsg = SocketMsg(self.socket.recvfrom(self.bfr_size))
+        print("socket message received, em is", em)
+        if(config.ExtensionMode == True and em is not None):
+            print("receiving bytes ", res.msg[config.headerSize:])
+            res.msg = res.msg[0:config.headerSize] + em.decrypt_message(res.msg[config.headerSize:], em.PrivateKey)
         m = Msg(res)
+        print("converted to message")
         #FOR WRONG RESPONSE TEST
         if(config.TestUnknownRequest == True):
             m.header.set_mt(-1) # this should never be possible
         #END TEST
         if(validate_response(m) == False):
-            raise ValueError("ERROR - Unknown response type!")
+            raise ValueError("ERROR - Unknown response type!", m.header.mt)
         if(m.header.mt == Types.error.value):
             raise ValueError("ERROR - Server responded with an error, unable to process package!")
         chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
@@ -45,16 +53,17 @@ class Socket_Manager:
             if(r.head.si == 2):
                 r.head.set_chks(0)
         #END TEST
+        print("sending bytes ", r.get_bytes())
         self.socket.sendto(r.get_bytes(), address)
 
-    def a_request_until_finished(self, head:Header, m:bytes, addr) -> bytes:
+    def a_request_until_finished(self, head:Header, m:bytes, addr, em:EncryptionManager = None) -> bytes:
         total:bytes = m
         print("starting total ", m.decode("utf-8"))
         while(head.si != head.lsi):
             # ToDO if want to send multi packet messages, then MUST remake header (otherwise return always has greater last slice 
             # index, even though its supposed to be 0)
             try:
-                res:Msg = self.req_manager.newReq(create_req(head, bytes()), addr)
+                res:Msg = self.req_manager.newReq(create_req(head, bytes()), addr, em)
             except ConnectionError as e:
                 print("Request Failure:", e)
                 raise CustomConnectionError("failed to request file index", head.fi, total)
@@ -73,10 +82,10 @@ class ReqManager:
         self.sm = sm
 
     # Request - Response functionality
-    def waitRes(self, r:Req, adr:tuple) -> Msg:
+    def waitRes(self, r:Req, adr:tuple, em:EncryptionManager = None) -> Msg:
         global FailureCount
         try:
-            rMsg = Msg(self.sm.a_recvMsg())
+            rMsg = Msg(self.sm.a_recvMsg(em))
             print("response from server")
             FailureCount = 0 # reset failure count
             return rMsg
@@ -86,15 +95,16 @@ class ReqManager:
             if(FailureCount >= config.AllowedFailureTotal): # if cannot get within failure count, then assume connection dead or failure to get
                 FailureCount = 0 # reset failure count
                 raise ConnectionError("Exceeded failure count, unable to request")
-            return self.newReq(r, adr)
+            return self.newReq(r, adr, em)
 
-    def newReq(self, r:Req, adr:tuple) -> Msg:
+    def newReq(self, r:Req, adr:tuple, em:EncryptionManager = None) -> Msg:
         self.sm.a_sendMsg(r, adr)
-        return self.waitRes(r, adr)
+        return self.waitRes(r, adr, em)
 
 class Package: # package
     def __init__(self, msg, bfr_size):
         self.msg_Size = bfr_size - headerSize
+        print("slice size will be limited to ", self.msg_Size)
         self.pt = getPackageNumber(bytes(msg, "utf-8"), self.msg_Size)
         self.list = splitPackage(bytes(msg, "utf-8"), self.msg_Size)
 

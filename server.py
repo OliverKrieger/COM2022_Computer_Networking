@@ -7,6 +7,7 @@ from utils import Socket_Manager
 import config
 from message import Msg
 import server_handlers
+import requests
 
 # global variables
 UDP_ss:Optional[socket.socket] = None
@@ -30,7 +31,11 @@ def server_loop(socket:socket.socket):
 
 def s_handle(msg:Msg):
     if(S_S_Manager is not None):
-        if(msg.header.fi == 0):
-                server_handlers.handle_resources_request(S_S_Manager, msg)
-        elif(msg.header.fi != 0):
-                server_handlers.handle_resource_index_request(S_S_Manager, msg)
+        if(msg.header.fi == 0 and (msg.header.mt == requests.Types.req.value or msg.header.mt == requests.Types.encryptReq.value)):
+            server_handlers.handle_resources_request(S_S_Manager, msg)
+        elif(msg.header.fi != 0 and (msg.header.mt == requests.Types.req.value or msg.header.mt == requests.Types.encryptReq.value)):
+            server_handlers.handle_resource_index_request(S_S_Manager, msg)
+        elif(msg.header.mt == requests.Types.exKeys.value):
+            server_handlers.handle_key_exchange(S_S_Manager, msg)
+        else:
+            print("message arrived, but of unknown request type. Request index was ", msg.header.mt)

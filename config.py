@@ -1,6 +1,15 @@
 from typing import Optional
+import math
 
+headerSize = 19
 base_bfr_size:int = 400
+
+ExtensionMode = True # to run extensions
+EncryptionBitSize:int = 512 # 512 is in bits
+EncryptionAllowedBufSize:int = math.ceil(EncryptionBitSize/8) # bytes will be 512 / 8, meaning 64
+EncryptionHeldBits:int = 11 # 11 bits are held by encryption
+EncryptionAllowedMessageSize:int = EncryptionAllowedBufSize - EncryptionHeldBits # meaning we can only use 64 - 11 bits for message, so 53
+
 c_bfr_size:int = base_bfr_size
 s_bfr_size:int = base_bfr_size
 
@@ -17,8 +26,6 @@ BindPort:Optional[int] = None # also local port
 BindAddress = (localIP, BindPort)
 
 AllowedFailureTotal = 5 # number of times a request-response can fail before stopping communications
-
-ExtensionMode = False # to run extensions
 
 # Tests
 TestFileSaveOnError = False # test if we only receive one packet and save it. Also tests that checksum validation works
