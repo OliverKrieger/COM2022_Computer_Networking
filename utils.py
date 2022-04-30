@@ -23,6 +23,7 @@ class Socket_Manager:
 
     def a_recvMsg(self, em:EncryptionManager = None):
         res:SocketMsg = SocketMsg(self.socket.recvfrom(self.bfr_size))
+        chks = calculateChks(res.msg[4:]) 
         print("socket message received, em is", em)
         if(config.ExtensionMode == True and em is not None):
             print("receiving bytes ", res.msg[config.headerSize:])
@@ -37,11 +38,16 @@ class Socket_Manager:
             raise ValueError("ERROR - Unknown response type!", m.header.mt)
         if(m.header.mt == Types.error.value):
             raise ValueError("ERROR - Server responded with an error, unable to process package!")
-        chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
-        if(m.header.chks != chks):
-            print("received chks", m.header.chks, "and calc chks ", chks)
+        # chks = calculateChks(res.msg[4:]) # calculate checksum to anything but checksum itself
+        hchks = int.from_bytes(res.msg[0:4], "little")
+        if(hchks != chks):
+            print("received chks", hchks, "and calc chks ", chks)
             raise ValueError("ERROR - package is corrupted, it has a wrong checksum.")
         return res
+        # if(m.header.chks != chks):
+        #     print("received chks", m.header.chks, "and calc chks ", chks)
+        #     raise ValueError("ERROR - package is corrupted, it has a wrong checksum.")
+        # return res
 
     def a_sendMsg(self, r: Req, address: tuple):
         print("new package to address ", address)
@@ -58,6 +64,7 @@ class Socket_Manager:
 
     def a_request_until_finished(self, head:Header, m:bytes, addr, em:EncryptionManager = None) -> bytes:
         total:bytes = m
+        rqType:int = head.mt
         print("starting total ", m.decode("utf-8"))
         while(head.si != head.lsi):
             # ToDO if want to send multi packet messages, then MUST remake header (otherwise return always has greater last slice 
@@ -70,6 +77,7 @@ class Socket_Manager:
             print("res type is ", res.header.mt)
             total += res.bytes
             head = res.header
+            head.mt = rqType
             head.si = head.si + 1
             head.lsi = head.lsi + 1
         return total
