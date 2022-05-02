@@ -4,7 +4,7 @@ import math
 headerSize = 19
 base_bfr_size:int = 400
 
-ExtensionMode = True # to run extensions
+ExtensionMode = False # to run extensions
 EncryptionBitSize:int = 512 # 512 is in bits
 EncryptionAllowedBufSize:int = math.ceil(EncryptionBitSize/8) # bytes will be 512 / 8, meaning 64
 EncryptionHeldBits:int = 11 # 11 bits are held by encryption
@@ -16,10 +16,10 @@ s_bfr_size:int = base_bfr_size
 resourcesPath = "./resources"
 resourceFailurePath = "./failures"
 
-localIP:str = "127.0.0.1"
-sendIP:str = "127.0.0.1"
-# localIP:str = "10.77.38.136"
-# sendIP:str = "10.77.100.203"
+# localIP:str = "127.0.0.1"
+# sendIP:str = "127.0.0.1"
+localIP:str = "10.77.38.136"
+sendIP:str = "10.77.100.203"
 ConnectionPort:Optional[int] = None # port we are sending to
 ConnectionAddress = (sendIP, ConnectionPort)
 BindPort:Optional[int] = None # also local port

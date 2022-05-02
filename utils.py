@@ -148,8 +148,8 @@ def splitPackage(pck:bytes, actual_bfr_size:int) -> list:
 def calculateChks(byte_arr:bytes):
     lrc = 0
     for b in byte_arr:
-        lrc = (lrc+b) & 0xFFFFFFFF
-    return ((lrc ^ 0xFFFFFFFF) + 1) & 0xFFFFFFFF
+        lrc = (lrc+b) & 0xFF
+    return ((lrc ^ 0xFF) + 1) & 0xFF
 
 def createPaths():
     if not os.path.exists(config.resourcesPath):
