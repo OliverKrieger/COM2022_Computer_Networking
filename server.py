@@ -30,10 +30,11 @@ def server_loop(socket:socket.socket):
 
 
 def s_handle(msg:Msg):
+    print("New message received from ", msg.address)
     if(S_S_Manager is not None):
-        if(msg.header.fi == 0 and (msg.header.mt == requests.Types.req.value or msg.header.mt == requests.Types.encryptReq.value)):
+        if(msg.header.fi == 0 and (msg.header.mt == requests.Types.req.value or msg.header.mt == requests.Types.encryptReq.value) and msg.header.si > 0):
             server_handlers.handle_resources_request(S_S_Manager, msg)
-        elif(msg.header.fi != 0 and (msg.header.mt == requests.Types.req.value or msg.header.mt == requests.Types.encryptReq.value)):
+        elif(msg.header.fi != 0 and (msg.header.mt == requests.Types.req.value or msg.header.mt == requests.Types.encryptReq.value) and msg.header.si > 0):
             server_handlers.handle_resource_index_request(S_S_Manager, msg)
         elif(msg.header.mt == requests.Types.exKeys.value):
             server_handlers.handle_key_exchange(S_S_Manager, msg)

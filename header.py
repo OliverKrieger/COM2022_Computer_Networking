@@ -51,6 +51,9 @@ class Header:
         + self.lsi.to_bytes(4, 'little')
         + self.fi.to_bytes(4, 'little') 
         + self.bl.to_bytes(2, 'little'))
+        print("*/////////////////////////////////*")
+        print("Header bytes: ", h)
+        print("*/////////////////////////////////*")
         return h
 
     def print_header(self) -> None:

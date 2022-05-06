@@ -45,10 +45,11 @@ def handle_get_resource(s_manager:Socket_Manager) -> None:
                     input = a_input()
 
         in_val = int(input) # validated as an integer so can be converted
+        print("*************************************")
         print("Requesting file index ", in_val)
     
         msg = request_index(s_manager, in_val)
-        print("File Value:\n", msg.decode("utf-8"))
+        print("Client Received All:\n", msg.decode("utf-8"))
     except CustomConnectionError as e:
         print(e)
         saveOnFailure(e)
@@ -100,7 +101,7 @@ def handle_re_request(s_manager:Socket_Manager, ffl:List[FailureFile]):
         print("Re-Requesting file index ", file.index, " with slice ", failurefile.slice_failed_on)
 
         msg = request_index(s_manager, file.index, failurefile.slice_failed_on, failurefile.contents)
-        print("File Value:\n", msg.decode("utf-8"))
+        print("Client Received All:\n", msg.decode("utf-8"))
         # if re-requested successfully, delete the failure
         fp:str = config.resourceFailurePath + "/" + failurefile.name
         os.remove(fp)
@@ -122,6 +123,7 @@ def request_index(s_manager:Socket_Manager, file_index:int, slice_index:int = 1,
     try:
         if(config.ExtensionMode == True and em is not None):
             print("request with encryption")
+            print("Client starting to request all...")
             return s_manager.a_request_until_finished(head, msg_start_total, config.ConnectionAddress, em)
         return s_manager.a_request_until_finished(head, msg_start_total, config.ConnectionAddress)
     except ConnectionError as e:
@@ -147,8 +149,8 @@ def saveOnFailure(e:CustomConnectionError):
 
 def handle_encrypt_exchange_keys(s_manager:Socket_Manager):
     global em
-    print("client requesting key exchange...")
     if(config.ExtensionMode == True and em is not None and em.ConnectionFromServerKey == None):
+        print("client requesting key exchange...")
         head = Header()
         head.set_mt(requests.Types.exKeys.value)
         print("exported public key size ", len(em.export_public_key()))

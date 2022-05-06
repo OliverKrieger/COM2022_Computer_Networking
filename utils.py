@@ -50,7 +50,9 @@ class Socket_Manager:
         # return res
 
     def a_sendMsg(self, r: Req, address: tuple):
+        print("*--------------------------------------------------------------*")
         print("new package to address ", address)
+        print("*--------------------------------------------------------------*\n")
         chks = calculateChks(r.get_bytes()[4:]) # calculate checksum to anything but checksum itself
         print("calculated checksum ", chks)
         r.head.set_chks(chks)
@@ -59,22 +61,28 @@ class Socket_Manager:
             if(r.head.si == 2):
                 r.head.set_chks(0)
         #END TEST
+        print("*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*")
         print("sending bytes ", r.get_bytes())
+        print("*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*\n")
         self.socket.sendto(r.get_bytes(), address)
 
     def a_request_until_finished(self, head:Header, m:bytes, addr, em:EncryptionManager = None) -> bytes:
         total:bytes = m
         rqType:int = head.mt
-        print("starting total ", m.decode("utf-8"))
+        if(len(m) > 0):
+            print("starting total ", m.decode("utf-8"))
         while(head.si != head.lsi):
             # ToDO if want to send multi packet messages, then MUST remake header (otherwise return always has greater last slice 
             # index, even though its supposed to be 0)
             try:
+                print("Client requesting next package...")
                 res:Msg = self.req_manager.newReq(create_req(head, bytes()), addr, em)
             except ConnectionError as e:
                 print("Request Failure:", e)
                 raise CustomConnectionError("failed to request file index", head.fi, total)
             print("res type is ", res.header.mt)
+            print("received message\n ", res.message)
+            print("*************************************\n")
             total += res.bytes
             head = res.header
             head.mt = rqType
@@ -94,7 +102,7 @@ class ReqManager:
         global FailureCount
         try:
             rMsg = Msg(self.sm.a_recvMsg(em))
-            print("response from server")
+            print("response from server ", rMsg.address)
             FailureCount = 0 # reset failure count
             return rMsg
         except Exception as e: # failed to get in time, so request again OR wrong checksum, so requesting again

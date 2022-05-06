@@ -47,6 +47,7 @@ def respond_slice(S_S_Manager:Socket_Manager, msg:Msg, pck:Package):
         print("slice size after encryption", len(p))
         print("encrypted message ", p)
     r:Req = create_req(head, p)
+    print("Server sending...")
     S_S_Manager.a_sendMsg(r, msg.address)
     
 

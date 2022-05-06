@@ -21,6 +21,10 @@ class Req:
         self.msg = r[headerSize:]
 
     def get_bytes(self) -> bytes:
+        print("[******************************************************]")
+        print("Request Header bytes ", self.head.get_header_bytes())
+        print("Request Message bytes ", self.msg)
+        print("[******************************************************]\n")
         return self.head.get_header_bytes() + self.msg
 
 def create_req(h:Header, m:bytes) -> Req:
