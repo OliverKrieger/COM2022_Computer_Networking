@@ -2,6 +2,11 @@ from enum import Enum
 
 import config
 
+#############################################
+# The file in charge of creating the header #
+#############################################
+
+
 headerSize = config.headerSize
 
 #####################################

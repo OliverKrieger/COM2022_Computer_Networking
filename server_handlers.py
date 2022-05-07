@@ -12,6 +12,7 @@ from encryption_manager import EncryptionManager
 fm:FileManager = FileManager()
 em:EncryptionManager = EncryptionManager()
 
+# respond resource list from server
 def handle_resources_request(S_S_Manager:Socket_Manager, msg:Msg):
     print("File list request received, requesting file, ", msg.header.fi, "with slice ", msg.header.si)
     pck:Package = create_resource_list(fm.files_as_str)
@@ -21,6 +22,7 @@ def handle_resources_request(S_S_Manager:Socket_Manager, msg:Msg):
         print(e)
         return
 
+# handle a resource request for a slice
 def handle_resource_index_request(S_S_Manager:Socket_Manager, msg:Msg):
     print("Requesting resource number ", msg.header.fi, "for slice ", msg.header.si)
     try:
@@ -32,7 +34,8 @@ def handle_resource_index_request(S_S_Manager:Socket_Manager, msg:Msg):
         print(e)
         error:str = "Requested slice " + str(msg.header.si) + " was out of bounds for resource index" + str(msg.header.fi)
         respond_error(S_S_Manager, error, msg.address)
-    
+
+# create header and values to respond with
 def respond_slice(S_S_Manager:Socket_Manager, msg:Msg, pck:Package):
     head = Header()
     head.set_mt(Types.res.value)
@@ -50,13 +53,14 @@ def respond_slice(S_S_Manager:Socket_Manager, msg:Msg, pck:Package):
     print("Server sending...")
     S_S_Manager.a_sendMsg(r, msg.address)
     
-
+# create resource list
 def create_resource_list(fl_list:str) -> Package:
     if(config.ExtensionMode == True):
         print("Allowed message size is ", config.EncryptionAllowedMessageSize)
         return Package(fl_list, config.EncryptionAllowedMessageSize)
     return Package(fl_list, config.c_bfr_size)
 
+# handle error response
 def respond_error(S_S_Manager:Socket_Manager, error:str, addr):
     head = Header()
     head.set_mt(Types.error.value)
@@ -64,6 +68,7 @@ def respond_error(S_S_Manager:Socket_Manager, error:str, addr):
     r:Req = create_req(head, b)
     S_S_Manager.a_sendMsg(r, addr)
 
+# handle key exchange
 def handle_key_exchange(S_S_Manager:Socket_Manager, msg:Msg):
     global em
     print("Server received key exchange request")

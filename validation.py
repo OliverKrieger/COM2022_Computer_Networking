@@ -9,6 +9,10 @@ from header import headerSize
 from message import Msg
 from requests import Types
 
+######################
+# Manages validation #
+######################
+
 #####################################
 #              Classes              #
 #####################################

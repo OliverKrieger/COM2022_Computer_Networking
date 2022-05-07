@@ -12,6 +12,10 @@ from encryption_manager import EncryptionManager
 
 FailureCount = 0
 
+##############################
+# Utilities across all files #
+##############################
+
 #####################################
 #              Classes              #
 #####################################

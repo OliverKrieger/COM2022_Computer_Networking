@@ -13,6 +13,7 @@ import requests
 UDP_ss:Optional[socket.socket] = None
 S_S_Manager:Optional[Socket_Manager] = None
 
+# server loop to handle receiving messages
 def server_loop(socket:socket.socket):
     global UDP_ss
     global S_S_Manager
@@ -28,7 +29,7 @@ def server_loop(socket:socket.socket):
         except ValueError as e:
             print(e)
 
-
+# handle received message appropriately, main handles in server_handlers file
 def s_handle(msg:Msg):
     print("New message received from ", msg.address)
     if(S_S_Manager is not None):

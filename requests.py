@@ -2,6 +2,10 @@ from enum import Enum
 
 from rsa import encrypt
 
+#################################
+# Manages constructing requests #
+#################################
+
 from header import Header, headerSize
 #########################################
 # Message Types

@@ -22,6 +22,7 @@ def handle_resource_listing(s_manager:Socket_Manager) -> None:
         print(e)
         return
 
+# get a resource from a server
 def handle_get_resource(s_manager:Socket_Manager) -> None:
     try:
         handle_encrypt_exchange_keys(s_manager) # lazy request
@@ -55,6 +56,7 @@ def handle_get_resource(s_manager:Socket_Manager) -> None:
         saveOnFailure(e)
         return
 
+# make sure re-request files exist
 def handle_re_request_check(s_manager:Socket_Manager):
     try:
         handle_encrypt_exchange_keys(s_manager) # lazy request
@@ -70,6 +72,7 @@ def handle_re_request_check(s_manager:Socket_Manager):
         print(e)
         return
 
+# re-request already requested resource
 def handle_re_request(s_manager:Socket_Manager, ffl:List[FailureFile]):
     for i in ffl:
         print("[", i.index, "]", i.name, "failed on slice ", i.slice_failed_on)
@@ -110,8 +113,7 @@ def handle_re_request(s_manager:Socket_Manager, ffl:List[FailureFile]):
         saveOnFailure(e)
         return
 
-
-
+# request a file with an index from a server
 def request_index(s_manager:Socket_Manager, file_index:int, slice_index:int = 1, msg_start_total = bytes()) -> bytes:
     print("Request for resource ", file_index, " with start slice index ", slice_index)
     head = Header()
@@ -130,6 +132,7 @@ def request_index(s_manager:Socket_Manager, file_index:int, slice_index:int = 1,
         print("request index", e)
         raise ConnectionError(e)
 
+# make sure we have validation manager
 def validate_validation_manager(s_manager:Socket_Manager) -> None:
     global validation_manager
     if(validation_manager == None):
@@ -140,6 +143,7 @@ def validate_validation_manager(s_manager:Socket_Manager) -> None:
             print("validation manager ", e)
             raise ConnectionError(e)
 
+# if we failed to get full package, save file failure
 def saveOnFailure(e:CustomConnectionError):
     print("Saving current retrieved message")
     if(validation_manager is not None):
@@ -147,6 +151,7 @@ def saveOnFailure(e:CustomConnectionError):
     else:
         print("unable to save fail failure!")
 
+# if we are trying encryption, handles key exchange
 def handle_encrypt_exchange_keys(s_manager:Socket_Manager):
     global em
     if(config.ExtensionMode == True and em is not None and em.ConnectionFromServerKey == None):

@@ -4,6 +4,10 @@ from typing import *
 from utils import Package
 import config
 
+########################################
+# The file in charge of managing files #
+########################################
+
 #####################################
 # Classes
 #####################################

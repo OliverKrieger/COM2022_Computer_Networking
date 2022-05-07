@@ -1,6 +1,10 @@
 from typing import Optional
 import math
 
+######################
+# All configurations #
+######################
+
 headerSize = 19
 base_bfr_size:int = 400
 
