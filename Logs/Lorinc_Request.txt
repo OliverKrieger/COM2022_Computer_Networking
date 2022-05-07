@@ -1,0 +1,176 @@
+oliver@oliver-LabTop:~/Documents/Uni/Year2/Compter Networking/Coursework$ python3 app.py 6677 10000
+****** SERVER FILE LIST ******
+1:8:characters.txt
+2:540:mouse.txt
+3:35:emoji.txt
+4:675:apple.txt
+5:300:The_file_name_for_this_file_is_quite_long.txt
+6:422:linux.txt
+
+******************************
+
+server initalisation called...
+Server:  ('10.77.38.136', 10000)
+client initalisation called...
+Client:  ('10.77.63.64', 6677)
+client initalisation finish.
+Start client loop...
+server initalisation finish.
+Start server loop...
+get
+
+
+Request for resource  0  with start slice index  1
+Client requesting next package...
+*/////////////////////////////////*
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+*--------------------------------------------------------------*
+new package to address  ('10.77.63.64', 6677)
+*--------------------------------------------------------------*
+
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+Request Header bytes  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+calculated checksum  254
+*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+Request Header bytes  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+sending bytes  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
+
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+Request Header bytes  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+socket message received, em is None
+converted to message
+response from server  ('10.77.63.64', 6677)
+res type is  2
+received message
+  1:0:.git/
+66:0:target/
+434:154:Cargo.lock
+435:0:src/
+442:8:.gitignore
+443:178:Cargo.toml
+
+*************************************
+
+split list is  ['1', '0', '.git/']
+split list is  ['66', '0', 'target/']
+split list is  ['434', '154', 'Cargo.lock']
+split list is  ['435', '0', 'src/']
+split list is  ['442', '8', '.gitignore']
+split list is  ['443', '178', 'Cargo.toml']
+Enter file index you would like to request: 
+1
+input is  1
+is   1 equal to 1
+is equal
+*************************************
+Requesting file index  1
+Request for resource  1  with start slice index  1
+Client requesting next package...
+*/////////////////////////////////*
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+*--------------------------------------------------------------*
+new package to address  ('10.77.63.64', 6677)
+*--------------------------------------------------------------*
+
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+Request Header bytes  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+calculated checksum  253
+*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+Request Header bytes  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+sending bytes  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
+
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+Request Header bytes  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+*/////////////////////////////////*
+socket message received, em is None
+converted to message
+response from server  ('10.77.63.64', 6677)
+res type is  2
+received message
+  2:99:FETCH_HEAD
+3:0:info/
+5:73:description
+6:813:index
+7:0:objects/
+34:0:hooks/
+48:0:refs/
+55:266:config
+56:51:COMMIT_EDITMSG
+57:23:HEAD
+58:0:logs/
+
+*************************************
+
+Client Received All:
+ 2:99:FETCH_HEAD
+3:0:info/
+5:73:description
+6:813:index
+7:0:objects/
+34:0:hooks/
+48:0:refs/
+55:266:config
+56:51:COMMIT_EDITMSG
+57:23:HEAD
+58:0:logs/
+
+

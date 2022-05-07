@@ -7,8 +7,10 @@ from requests import Req, Types, create_req
 from message import Msg
 import config
 from file_manager import FileManager
+from encryption_manager import EncryptionManager
 
 fm:FileManager = FileManager()
+em:EncryptionManager = EncryptionManager()
 
 def handle_resources_request(S_S_Manager:Socket_Manager, msg:Msg):
     print("File list request received, requesting file, ", msg.header.fi, "with slice ", msg.header.si)
@@ -23,6 +25,8 @@ def handle_resource_index_request(S_S_Manager:Socket_Manager, msg:Msg):
     print("Requesting resource number ", msg.header.fi, "for slice ", msg.header.si)
     try:
         pck:Package = fm.get_resource_as_pck(msg.header.fi-1, config.c_bfr_size)
+        if(config.ExtensionMode == True):
+            pck = fm.get_resource_as_pck(msg.header.fi-1, config.EncryptionAllowedMessageSize)
         respond_slice(S_S_Manager, msg, pck)
     except ValueError as e:
         print(e)
@@ -37,11 +41,20 @@ def respond_slice(S_S_Manager:Socket_Manager, msg:Msg, pck:Package):
     head.set_lsi(len(pck.list))
     p:bytes = pck.getListItem(msg.header.si - 1)
     head.set_bl(len(p))
+    if(config.ExtensionMode == True and em is not None):
+        print("Responding slice length ", len(p))
+        p = em.encrypt_message(p, em.ConnectionFromClientKey)
+        print("slice size after encryption", len(p))
+        print("encrypted message ", p)
     r:Req = create_req(head, p)
+    print("Server sending...")
     S_S_Manager.a_sendMsg(r, msg.address)
     
 
 def create_resource_list(fl_list:str) -> Package:
+    if(config.ExtensionMode == True):
+        print("Allowed message size is ", config.EncryptionAllowedMessageSize)
+        return Package(fl_list, config.EncryptionAllowedMessageSize)
     return Package(fl_list, config.c_bfr_size)
 
 def respond_error(S_S_Manager:Socket_Manager, error:str, addr):
@@ -50,3 +63,15 @@ def respond_error(S_S_Manager:Socket_Manager, error:str, addr):
     b:bytes = error.encode("utf-8")
     r:Req = create_req(head, b)
     S_S_Manager.a_sendMsg(r, addr)
+
+def handle_key_exchange(S_S_Manager:Socket_Manager, msg:Msg):
+    global em
+    print("Server received key exchange request")
+    if(config.ExtensionMode == True and em is not None):
+        em.set_cck(msg.bytes)
+        head = Header()
+        head.set_mt(Types.res.value)
+        r:Req = create_req(head, em.export_public_key())
+        print("Server responding to key exchange request...")
+        S_S_Manager.a_sendMsg(r, msg.address)
+
