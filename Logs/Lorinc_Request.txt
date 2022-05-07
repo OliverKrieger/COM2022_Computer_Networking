@@ -1,4 +1,4 @@
-oliver@oliver-LabTop:~/Documents/Uni/Year2/Compter Networking/Coursework$ python3 app.py 6677 10000
+python3 app.py 6677 10000
 ****** SERVER FILE LIST ******
 1:8:characters.txt
 2:540:mouse.txt

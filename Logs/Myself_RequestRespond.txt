@@ -1,4 +1,5 @@
-python3 app.py 6677 10000
+REQUEST:
+python3 app.py 10001 10000
 ****** SERVER FILE LIST ******
 1:8:characters.txt
 2:540:mouse.txt
@@ -10,13 +11,13 @@ python3 app.py 6677 10000
 ******************************
 
 server initalisation called...
-Server:  ('10.77.38.136', 10000)
-client initalisation called...
-Client:  ('10.77.63.64', 6677)
-client initalisation finish.
-Start client loop...
+Server:  ('127.0.0.1', 10000)
 server initalisation finish.
 Start server loop...
+client initalisation called...
+Client:  ('127.0.0.1', 10001)
+client initalisation finish.
+Start client loop...
 get
 
 
@@ -26,7 +27,7 @@ Client requesting next package...
 Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
 */////////////////////////////////*
 *--------------------------------------------------------------*
-new package to address  ('10.77.63.64', 6677)
+new package to address  ('127.0.0.1', 10001)
 *--------------------------------------------------------------*
 
 [******************************************************]
@@ -69,113 +70,202 @@ Header bytes:  b'\xfe\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0
 */////////////////////////////////*
 socket message received, em is None
 converted to message
-response from server  ('10.77.63.64', 6677)
+response from server  ('127.0.0.1', 10001)
 res type is  2
 received message
-  1:0:.git/
-66:0:target/
-434:154:Cargo.lock
-435:0:src/
-442:8:.gitignore
-443:178:Cargo.toml
+  1:8:characters.txt
+2:540:mouse.txt
+3:35:emoji.txt
+4:675:apple.txt
+5:300:The_file_name_for_this_file_is_quite_long.txt
+6:422:linux.txt
 
 *************************************
 
-split list is  ['1', '0', '.git/']
-split list is  ['66', '0', 'target/']
-split list is  ['434', '154', 'Cargo.lock']
-split list is  ['435', '0', 'src/']
-split list is  ['442', '8', '.gitignore']
-split list is  ['443', '178', 'Cargo.toml']
+split list is  ['1', '8', 'characters.txt']
+split list is  ['2', '540', 'mouse.txt']
+split list is  ['3', '35', 'emoji.txt']
+split list is  ['4', '675', 'apple.txt']
+split list is  ['5', '300', 'The_file_name_for_this_file_is_quite_long.txt']
+split list is  ['6', '422', 'linux.txt']
 Enter file index you would like to request: 
-1
-input is  1
-is   1 equal to 1
+6
+input is  6
+is   1 equal to 6
+is   2 equal to 6
+is   3 equal to 6
+is   4 equal to 6
+is   5 equal to 6
+is   6 equal to 6
 is equal
 *************************************
-Requesting file index  1
-Request for resource  1  with start slice index  1
+Requesting file index  6
+Request for resource  6  with start slice index  1
 Client requesting next package...
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 */////////////////////////////////*
 *--------------------------------------------------------------*
-new package to address  ('10.77.63.64', 6677)
+new package to address  ('127.0.0.1', 10001)
 *--------------------------------------------------------------*
 
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 */////////////////////////////////*
-Request Header bytes  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Request Header bytes  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 Request Message bytes  b''
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Header bytes:  b'\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 */////////////////////////////////*
-calculated checksum  253
+calculated checksum  248
 *^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Header bytes:  b'\xf8\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 */////////////////////////////////*
-Request Header bytes  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Request Header bytes  b'\xf8\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 Request Message bytes  b''
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Header bytes:  b'\xf8\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 */////////////////////////////////*
-sending bytes  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+sending bytes  b'\xf8\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 *^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
 
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Header bytes:  b'\xf8\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 */////////////////////////////////*
-Request Header bytes  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Request Header bytes  b'\xf8\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 Request Message bytes  b''
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\xfd\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
+Header bytes:  b'\xf8\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x06\x00\x00\x00\x00\x00'
 */////////////////////////////////*
 socket message received, em is None
 converted to message
-response from server  ('10.77.63.64', 6677)
+response from server  ('127.0.0.1', 10001)
 res type is  2
 received message
-  2:99:FETCH_HEAD
-3:0:info/
-5:73:description
-6:813:index
-7:0:objects/
-34:0:hooks/
-48:0:refs/
-55:266:config
-56:51:COMMIT_EDITMSG
-57:23:HEAD
-58:0:logs/
+           _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____
+*************************************
+
+Client requesting next package...
+*/////////////////////////////////*
+Header bytes:  b'\x91\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*/////////////////////////////////*
+*--------------------------------------------------------------*
+new package to address  ('127.0.0.1', 10001)
+*--------------------------------------------------------------*
+
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'\x91\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*/////////////////////////////////*
+Request Header bytes  b'\x91\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'\x91\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*/////////////////////////////////*
+calculated checksum  118
+*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'v\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*/////////////////////////////////*
+Request Header bytes  b'v\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'v\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*/////////////////////////////////*
+sending bytes  b'v\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
+
+[******************************************************]
+*/////////////////////////////////*
+Header bytes:  b'v\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*/////////////////////////////////*
+Request Header bytes  b'v\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+Request Message bytes  b''
+[******************************************************]
+
+*/////////////////////////////////*
+Header bytes:  b'v\x00\x00\x00\x01\x02\x00\x00\x00\x03\x00\x00\x00\x06\x00\x00\x00}\x01'
+*/////////////////////////////////*
+socket message received, em is None
+converted to message
+response from server  ('127.0.0.1', 10001)
+res type is  2
+received message
+     )MMMMMM|   .'
+     `-'       `--' hjm
 
 *************************************
 
 Client Received All:
- 2:99:FETCH_HEAD
-3:0:info/
-5:73:description
-6:813:index
-7:0:objects/
-34:0:hooks/
-48:0:refs/
-55:266:config
-56:51:COMMIT_EDITMSG
-57:23:HEAD
-58:0:logs/
+          _nnnn_                      
+        dGGGGMMb     ,"""""""""""""".
+       @p~qp~~qMb    | Linux Rules! |
+       M|@||@) M|   _;..............'
+       @,----.JM| -'
+      JS^\__/  qKL
+     dZP        qKRb
+    dZP          qKKb
+   fZP            SMMb
+   HZM            MMMM
+   FqM            MMMM
+ __| ".        |\dS"qML
+ |    `.       | `' \Zq
+_)      \.___.,|     .'
+\____   )MMMMMM|   .'
+     `-'       `--' hjm
 
+RESPOND:
+python3 app.py 10000 10001
+****** SERVER FILE LIST ******
+1:8:characters.txt
+2:540:mouse.txt
+3:35:emoji.txt
+4:675:apple.txt
+5:300:The_file_name_for_this_file_is_quite_long.txt
+6:422:linux.txt
+
+******************************
+
+server initalisation called...
+Server:  ('127.0.0.1', 10001)
+client initalisation called...
+Client:  ('127.0.0.1', 10000)
+server initalisation finish.
+Start server loop...
+client initalisation finish.
+Start client loop...
 socket message received, em is None
 converted to message
-New message received from  ('10.77.63.64', 57176)
+New message received from  ('127.0.0.1', 44366)
 File list request received, requesting file,  0 with slice  1
 slice size will be limited to  381
 */////////////////////////////////*
@@ -183,7 +273,7 @@ Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x0
 */////////////////////////////////*
 Server sending...
 *--------------------------------------------------------------*
-new package to address  ('10.77.63.64', 57176)
+new package to address  ('127.0.0.1', 44366)
 *--------------------------------------------------------------*
 
 [******************************************************]
@@ -226,159 +316,108 @@ Header bytes:  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x0
 */////////////////////////////////*
 socket message received, em is None
 converted to message
-New message received from  ('10.77.63.64', 59521)
-File list request received, requesting file,  0 with slice  1
-slice size will be limited to  381
-*/////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-*/////////////////////////////////*
-Server sending...
-*--------------------------------------------------------------*
-new package to address  ('10.77.63.64', 59521)
-*--------------------------------------------------------------*
-
-[******************************************************]
-*/////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-*/////////////////////////////////*
-Request Header bytes  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-Request Message bytes  b'1:8:characters.txt\n2:540:mouse.txt\n3:35:emoji.txt\n4:675:apple.txt\n5:300:The_file_name_for_this_file_is_quite_long.txt\n6:422:linux.txt\n'
-[******************************************************]
-
-*/////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-*/////////////////////////////////*
-calculated checksum  167
-*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
-[******************************************************]
-*/////////////////////////////////*
-Header bytes:  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-*/////////////////////////////////*
-Request Header bytes  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-Request Message bytes  b'1:8:characters.txt\n2:540:mouse.txt\n3:35:emoji.txt\n4:675:apple.txt\n5:300:The_file_name_for_this_file_is_quite_long.txt\n6:422:linux.txt\n'
-[******************************************************]
-
-*/////////////////////////////////*
-Header bytes:  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-*/////////////////////////////////*
-sending bytes  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x001:8:characters.txt\n2:540:mouse.txt\n3:35:emoji.txt\n4:675:apple.txt\n5:300:The_file_name_for_this_file_is_quite_long.txt\n6:422:linux.txt\n'
-*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
-
-[******************************************************]
-*/////////////////////////////////*
-Header bytes:  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-*/////////////////////////////////*
-Request Header bytes  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-Request Message bytes  b'1:8:characters.txt\n2:540:mouse.txt\n3:35:emoji.txt\n4:675:apple.txt\n5:300:The_file_name_for_this_file_is_quite_long.txt\n6:422:linux.txt\n'
-[******************************************************]
-
-*/////////////////////////////////*
-Header bytes:  b'\xa7\x00\x00\x00\x02\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x86\x00'
-*/////////////////////////////////*
-socket message received, em is None
-converted to message
-New message received from  ('10.77.63.64', 42289)
-Requesting resource number  2 for slice  1
+New message received from  ('127.0.0.1', 44366)
+Requesting resource number  6 for slice  1
 getting resource as a package
 returning with buffer size
 slice size will be limited to  381
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
+Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
 */////////////////////////////////*
 Server sending...
 *--------------------------------------------------------------*
-new package to address  ('10.77.63.64', 42289)
+new package to address  ('127.0.0.1', 44366)
 *--------------------------------------------------------------*
 
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
+Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
 */////////////////////////////////*
-Request Header bytes  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
-Request Message bytes  b"    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |     |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |  "
+Request Header bytes  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
+Request Message bytes  b'         _nnnn_                      \n        dGGGGMMb     ,"""""""""""""".\n       @p~qp~~qMb    | Linux Rules! |\n       M|@||@) M|   _;..............\'\n       @,----.JM| -\'\n      JS^\\__/  qKL\n     dZP        qKRb\n    dZP          qKKb\n   fZP            SMMb\n   HZM            MMMM\n   FqM            MMMM\n __| ".        |\\dS"qML\n |    `.       | `\' \\Zq\n_)      \\.___.,|     .\'\n\\____'
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
+Header bytes:  b'\x00\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
 */////////////////////////////////*
-calculated checksum  255
+calculated checksum  145
 *^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\xff\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
+Header bytes:  b'\x91\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
 */////////////////////////////////*
-Request Header bytes  b'\xff\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
-Request Message bytes  b"    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |     |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |  "
+Request Header bytes  b'\x91\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
+Request Message bytes  b'         _nnnn_                      \n        dGGGGMMb     ,"""""""""""""".\n       @p~qp~~qMb    | Linux Rules! |\n       M|@||@) M|   _;..............\'\n       @,----.JM| -\'\n      JS^\\__/  qKL\n     dZP        qKRb\n    dZP          qKKb\n   fZP            SMMb\n   HZM            MMMM\n   FqM            MMMM\n __| ".        |\\dS"qML\n |    `.       | `\' \\Zq\n_)      \\.___.,|     .\'\n\\____'
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\xff\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
+Header bytes:  b'\x91\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
 */////////////////////////////////*
-sending bytes  b"\xff\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |     |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |  "
+sending bytes  b'\x91\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01         _nnnn_                      \n        dGGGGMMb     ,"""""""""""""".\n       @p~qp~~qMb    | Linux Rules! |\n       M|@||@) M|   _;..............\'\n       @,----.JM| -\'\n      JS^\\__/  qKL\n     dZP        qKRb\n    dZP          qKKb\n   fZP            SMMb\n   HZM            MMMM\n   FqM            MMMM\n __| ".        |\\dS"qML\n |    `.       | `\' \\Zq\n_)      \\.___.,|     .\'\n\\____'
 *^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
 
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\xff\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
+Header bytes:  b'\x91\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
 */////////////////////////////////*
-Request Header bytes  b'\xff\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
-Request Message bytes  b"    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |     |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n    ,d88b\n ,8P'    `8,\n 8'       _.8._\n8       .'  |  '.\n       /    |    \\\n      |    [_]    |\n      |     |  "
+Request Header bytes  b'\x91\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
+Request Message bytes  b'         _nnnn_                      \n        dGGGGMMb     ,"""""""""""""".\n       @p~qp~~qMb    | Linux Rules! |\n       M|@||@) M|   _;..............\'\n       @,----.JM| -\'\n      JS^\\__/  qKL\n     dZP        qKRb\n    dZP          qKKb\n   fZP            SMMb\n   HZM            MMMM\n   FqM            MMMM\n __| ".        |\\dS"qML\n |    `.       | `\' \\Zq\n_)      \\.___.,|     .\'\n\\____'
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\xff\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00}\x01'
+Header bytes:  b'\x91\x00\x00\x00\x02\x01\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00}\x01'
 */////////////////////////////////*
 socket message received, em is None
 converted to message
-New message received from  ('10.77.63.64', 42289)
-Requesting resource number  2 for slice  2
+New message received from  ('127.0.0.1', 44366)
+Requesting resource number  6 for slice  2
 getting resource as a package
 returning with buffer size
 slice size will be limited to  381
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
+Header bytes:  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
 */////////////////////////////////*
 Server sending...
 *--------------------------------------------------------------*
-new package to address  ('10.77.63.64', 42289)
+new package to address  ('127.0.0.1', 44366)
 *--------------------------------------------------------------*
 
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
+Header bytes:  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
 */////////////////////////////////*
-Request Header bytes  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
-Request Message bytes  b"   |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n"
+Request Header bytes  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
+Request Message bytes  b"   )MMMMMM|   .'\n     `-'       `--' hjm\n"
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
+Header bytes:  b'\x00\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
 */////////////////////////////////*
-calculated checksum  17
+calculated checksum  187
 *^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\x11\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
+Header bytes:  b'\xbb\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
 */////////////////////////////////*
-Request Header bytes  b'\x11\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
-Request Message bytes  b"   |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n"
+Request Header bytes  b'\xbb\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
+Request Message bytes  b"   )MMMMMM|   .'\n     `-'       `--' hjm\n"
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\x11\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
+Header bytes:  b'\xbb\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
 */////////////////////////////////*
-sending bytes  b"\x11\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00   |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n"
+sending bytes  b"\xbb\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00   )MMMMMM|   .'\n     `-'       `--' hjm\n"
 *^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*
 
 [******************************************************]
 */////////////////////////////////*
-Header bytes:  b'\x11\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
+Header bytes:  b'\xbb\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
 */////////////////////////////////*
-Request Header bytes  b'\x11\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
-Request Message bytes  b"   |\n      |-----'-----|\n      |           |\n      |           |\n      |;         .|\n      ;\\         /;\n       \\\\       //\n   jgs  \\'._ _.'/\n         '-...-'\n"
+Request Header bytes  b'\xbb\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
+Request Message bytes  b"   )MMMMMM|   .'\n     `-'       `--' hjm\n"
 [******************************************************]
 
 */////////////////////////////////*
-Header bytes:  b'\x11\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x9f\x00'
+Header bytes:  b'\xbb\x00\x00\x00\x02\x02\x00\x00\x00\x02\x00\x00\x00\x06\x00\x00\x00)\x00'
 */////////////////////////////////*
 

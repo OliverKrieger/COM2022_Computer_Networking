@@ -18,8 +18,9 @@ resourceFailurePath = "./failures"
 
 localIP:str = "127.0.0.1"
 sendIP:str = "127.0.0.1"
-# Liam
+# MyIP
 # localIP:str = "10.77.38.136"
+# Liam
 # sendIP:str = "10.77.100.203"
 # Lorinc
 # sendIP:str = "10.77.63.64"
